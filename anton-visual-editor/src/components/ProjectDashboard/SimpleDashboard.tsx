@@ -40,49 +40,90 @@ export default function SimpleDashboard() {
     }
   };
 
-  const handleCreateProject = async (projectData: { name: string; prompt: string }) => {
+  const handleCreateProject = async (projectData: { name: string; prompt: string }, skipPlanning = false) => {
     try {
-      // Try the new planning endpoint first (uses Claude CLI)
-      let circuitResponse = await fetch('/api/plan-circuit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: projectData.prompt }),
-      }).catch(() => null);
+      let circuitBoard = null;
       
-      // If planning fails, try AI generation
-      if (!circuitResponse || !circuitResponse.ok) {
-        circuitResponse = await fetch('/api/generate-circuit-ai', {
+      if (!skipPlanning) {
+        // Try Claude CLI planning
+        const planResponse = await fetch('/api/plan-circuit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt: projectData.prompt }),
-        }).catch(() => 
-          // Final fallback to simple generation
-          fetch('/api/generate-circuit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: projectData.prompt }),
-          })
-        );
+        });
+        
+        if (planResponse.ok) {
+          const result = await planResponse.json();
+          
+          // Check if planning is async (returns planningId)
+          if (result.planningId) {
+            // Poll for results
+            let attempts = 0;
+            const maxAttempts = 60; // Poll for up to 5 minutes
+            
+            while (attempts < maxAttempts) {
+              await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+              
+              const statusResponse = await fetch(`/api/plan-project/${result.planningId}`);
+              if (statusResponse.ok) {
+                const statusResult = await statusResponse.json();
+                
+                if (statusResult.status !== 'running') {
+                  circuitBoard = statusResult;
+                  break;
+                }
+              }
+              
+              attempts++;
+            }
+            
+            if (!circuitBoard) {
+              throw new Error('Planning timed out. Claude may still be working - please try creating the project without planning.');
+            }
+          } else {
+            circuitBoard = result;
+          }
+        } else {
+          const error = await planResponse.json();
+          throw new Error(error.error || 'Planning failed');
+        }
       }
-
-      if (circuitResponse.ok) {
-        const circuitBoard = await circuitResponse.json();
+      
+      // If no circuit board from planning or skipPlanning is true, use simple generation
+      if (!circuitBoard) {
+        const response = await fetch('/api/generate-circuit-ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: projectData.prompt }),
+        });
         
-        // Create project with circuit board using backend service
-        const project = await backendProjectService.createProject(
-          projectData.name,
-          projectData.prompt,
-          circuitBoard
-        );
+        if (!response.ok) {
+          throw new Error('Failed to generate circuit board');
+        }
         
-        // Reload projects list
-        await loadProjects();
-        
-        // Navigate to circuit board
-        router.push(`/circuit-board?id=${project.id}`);
+        circuitBoard = await response.json();
       }
+      
+      // Create project with circuit board using backend service
+      const project = await backendProjectService.createProject(
+        projectData.name,
+        projectData.prompt,
+        circuitBoard
+      );
+      
+      // Reload projects list
+      await loadProjects();
+      
+      // Navigate to circuit board
+      router.push(`/circuit-board?id=${project.id}`);
     } catch (error) {
       console.error('Failed to create project:', error);
+      
+      // Show error with retry option
+      const message = error instanceof Error ? error.message : 'Failed to create project';
+      if (confirm(`${message}\n\nWould you like to try creating the project without Claude planning?`)) {
+        handleCreateProject(projectData, true); // Retry without planning
+      }
     }
   };
 

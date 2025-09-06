@@ -260,6 +260,36 @@ class OrchestrationServer {
       }
     });
 
+    // Planning endpoints
+    const { planProject, getPlanningResult } = require('./api/plan-project');
+    this.app.post('/api/plan-project', planProject);
+    this.app.get('/api/plan-project/:id', getPlanningResult);
+
+    // Webhook endpoints for Claude hooks
+    this.app.post('/api/agent-complete', (req, res) => {
+      const { nodeId, status, output } = req.body;
+      console.log(`Agent completed for node ${nodeId} with status ${status}`);
+      // Emit event for any listeners
+      this.wsService?.broadcastNodeEvent(nodeId, 'node:completed', { status, output });
+      res.json({ success: true });
+    });
+
+    this.app.post('/api/agent-error', (req, res) => {
+      const { nodeId, error } = req.body;
+      console.error(`Agent error for node ${nodeId}:`, error);
+      // Emit event for any listeners
+      this.wsService?.broadcastNodeEvent(nodeId, 'node:error', { error });
+      res.json({ success: true });
+    });
+
+    this.app.post('/api/file-changed', (req, res) => {
+      const { nodeId, files } = req.body;
+      console.log(`Files changed for node ${nodeId}:`, files);
+      // Emit event for any listeners
+      this.wsService?.streamFileChange(nodeId, files);
+      res.json({ success: true });
+    });
+
     this.app.post('/api/flow/execute', async (req, res) => {
       try {
         const { flow, options } = req.body;

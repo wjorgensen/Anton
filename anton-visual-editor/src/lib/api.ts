@@ -393,6 +393,7 @@ export class RealtimeConnection {
 export const realtime = new RealtimeConnection();
 
 // Auto-connect on module load if in browser
-if (typeof window !== 'undefined') {
-  realtime.connect();
-}
+// Disabled: Using Socket.io via useWebSocket hook instead
+// if (typeof window !== 'undefined') {
+//   realtime.connect();
+// }

@@ -1,7 +1,7 @@
 'use client';
 
-import RetroDashboard from '@/components/ProjectDashboard/RetroDashboard';
+import SimpleDashboard from '@/components/ProjectDashboard/SimpleDashboard';
 
 export default function Home() {
-  return <RetroDashboard />;
+  return <SimpleDashboard />;
 }

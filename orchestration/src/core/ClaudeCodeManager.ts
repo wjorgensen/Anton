@@ -218,15 +218,18 @@ curl -X POST ${this.hooksBaseUrl}/api/agent-error \\
   private async spawnClaudeProcess(projectDir: string, instructions: string): Promise<ChildProcess> {
     // Using claude CLI with correct parameters for headless execution
     const childProcess = spawn('claude', [
-      '-p',
-      '--dangerously-skip-permissions',
+      '-p', // Print mode for non-interactive output
+      '--dangerously-skip-permissions', // Skip permission prompts for automation
+      '--output-format', 'text', // Ensure text output
       instructions
     ], {
       cwd: projectDir,
       env: {
         ...process.env,
-        CLAUDE_PROJECT_DIR: projectDir
-      }
+        CLAUDE_PROJECT_DIR: projectDir,
+        NO_COLOR: '1' // Disable color output for cleaner parsing
+      },
+      stdio: ['pipe', 'pipe', 'pipe'] // Ensure all streams are piped
     });
 
     return childProcess;

@@ -4,6 +4,12 @@
 echo "🚀 Starting Anton v2..."
 echo "================================"
 
+# Kill any existing processes on required ports
+echo "🧹 Cleaning up existing processes..."
+lsof -ti:3000 | xargs kill -9 2>/dev/null
+lsof -ti:3001 | xargs kill -9 2>/dev/null
+lsof -ti:3002 | xargs kill -9 2>/dev/null
+
 # Check if Redis is running, if not start it
 if ! redis-cli ping > /dev/null 2>&1; then
     echo "📦 Starting Redis..."
@@ -18,9 +24,19 @@ else
     echo "✅ Redis already running"
 fi
 
-# Start Orchestrator Service
-echo "🔧 Starting Orchestrator Service..."
+# Initialize database if needed
+echo "🗄️ Checking database..."
 cd orchestration
+if [ ! -f "prisma/dev.db" ]; then
+    echo "📝 Initializing database..."
+    npx prisma migrate dev --name init > /dev/null 2>&1
+    echo "✅ Database initialized"
+else
+    echo "✅ Database already exists"
+fi
+
+# Start Orchestrator Service with environment variables
+echo "🔧 Starting Orchestrator Service..."
 npm run dev > ../orchestrator.log 2>&1 &
 ORCH_PID=$!
 echo "✅ Orchestrator started (PID: $ORCH_PID)"
@@ -28,12 +44,18 @@ cd ..
 
 # Wait for orchestrator to be ready
 echo "⏳ Waiting for orchestrator to be ready..."
-sleep 3
+sleep 5
+
+# Check if orchestrator is running
+if ! kill -0 $ORCH_PID 2>/dev/null; then
+    echo "❌ Orchestrator failed to start. Check orchestrator.log for details"
+    exit 1
+fi
 
 # Start Frontend
 echo "🎨 Starting Frontend..."
 cd anton-visual-editor
-npm run dev > ../frontend.log 2>&1 &
+PORT=3001 npm run dev > ../frontend.log 2>&1 &
 FRONTEND_PID=$!
 echo "✅ Frontend started (PID: $FRONTEND_PID)"
 cd ..
@@ -42,21 +64,24 @@ cd ..
 echo $ORCH_PID > .anton-pids
 echo $FRONTEND_PID >> .anton-pids
 
+# Wait for frontend to be ready
+sleep 3
+
 echo ""
 echo "================================"
 echo "✨ Anton v2 is running!"
 echo "================================"
 echo ""
-echo "📍 Frontend:     http://localhost:3000"
+echo "📍 Frontend:     http://localhost:3001"
 echo "📍 Orchestrator: http://localhost:3002"
 echo "📍 Database:     orchestration/prisma/dev.db"
 echo ""
 echo "📁 Project Storage Locations:"
 echo "   - Database: orchestration/prisma/dev.db (SQLite)"
-echo "   - Generated Files: /tmp/anton/ (temporary)"
+echo "   - Claude Projects: /tmp/anton-agents/ (temporary)"
 echo ""
 echo "🛑 To stop: ./stop.sh or press Ctrl+C"
 echo ""
 echo "Opening browser..."
 sleep 2
-open http://localhost:3000 2>/dev/null || xdg-open http://localhost:3000 2>/dev/null || echo "Please open http://localhost:3000 in your browser"
+open http://localhost:3001 2>/dev/null || xdg-open http://localhost:3001 2>/dev/null || echo "Please open http://localhost:3001 in your browser"
