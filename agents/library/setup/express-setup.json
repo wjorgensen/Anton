@@ -1,0 +1,115 @@
+{
+  "id": "express-setup",
+  "name": "Express.js Setup Agent",
+  "category": "setup",
+  "type": "express-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up production-ready Express.js backend applications with TypeScript, middleware, security, and database integration",
+  "icon": "express",
+  "color": "#000000",
+  "instructions": {
+    "base": "You are an Express.js backend specialist. Your role is to create robust, scalable Express applications with proper architecture, security, error handling, and database integration. You have expertise in Node.js, Express middleware, REST APIs, and backend best practices.",
+    "contextual": "Set up an Express.js backend: {{projectName}} with database: {{database}}, authentication: {{auth}}, and features: {{features}}."
+  },
+  "claudeMD": "# Express.js Setup Agent\n\nSpecializes in creating production-ready Express backends:\n- Express 4.x with TypeScript\n- RESTful API architecture\n- Database integration (PostgreSQL, MongoDB, MySQL)\n- Authentication & authorization\n- Security middleware\n- Error handling\n- Logging and monitoring\n\n## Core Competencies\n- Route organization\n- Middleware configuration\n- Database ORM/ODM setup\n- JWT authentication\n- Rate limiting\n- CORS configuration\n- API documentation\n- Testing setup",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the Express project"
+    },
+    {
+      "name": "database",
+      "type": "string",
+      "required": false,
+      "description": "Database type (postgres, mongodb, mysql, sqlite)",
+      "default": "postgres"
+    },
+    {
+      "name": "orm",
+      "type": "string",
+      "required": false,
+      "description": "ORM/ODM to use (prisma, typeorm, mongoose, sequelize)",
+      "default": "prisma"
+    },
+    {
+      "name": "authentication",
+      "type": "boolean",
+      "required": false,
+      "description": "Include authentication setup",
+      "default": true
+    },
+    {
+      "name": "apiDocs",
+      "type": "boolean",
+      "required": false,
+      "description": "Include API documentation (Swagger)",
+      "default": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to created project"
+    },
+    {
+      "name": "apiEndpoints",
+      "type": "array",
+      "description": "List of configured API endpoints"
+    },
+    {
+      "name": "databaseConfig",
+      "type": "object",
+      "description": "Database connection configuration"
+    },
+    {
+      "name": "port",
+      "type": "number",
+      "description": "Server port configuration"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type setup"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-install.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 10,
+    "estimatedTokens": 45000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["express", "nodejs", "backend", "api", "rest", "typescript", "server"]
+}

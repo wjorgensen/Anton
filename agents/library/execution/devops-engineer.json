@@ -1,0 +1,158 @@
+{
+  "id": "devops-engineer",
+  "name": "DevOps Engineer Agent",
+  "category": "execution",
+  "type": "devops-engineer",
+  "version": "1.0.0",
+  "description": "Specialized agent for developing infrastructure, CI/CD pipelines, containerization, monitoring, and automation with DevOps best practices",
+  "icon": "devops",
+  "color": "#FF9800",
+  "instructions": {
+    "base": "You are an expert DevOps engineer. Your role is to implement infrastructure as code, CI/CD pipelines, containerization, monitoring, and automation solutions using modern DevOps tools and practices. You build scalable and reliable deployment systems.",
+    "contextual": "Implement the following DevOps feature: {{featureDescription}}. Requirements: {{requirements}}. Platform: {{platform}}. Tools: {{tools}}. Follow infrastructure best practices and automation principles."
+  },
+  "claudeMD": "# DevOps Engineer Agent\n\nExpert in DevOps practices with:\n- Docker containerization and orchestration\n- Kubernetes cluster management\n- CI/CD pipeline design (GitHub Actions, GitLab CI)\n- Infrastructure as Code (Terraform, Pulumi)\n- Cloud platforms (AWS, GCP, Azure)\n- Monitoring and observability (Prometheus, Grafana)\n- Configuration management (Ansible, Helm)\n- Security and compliance automation\n\n## Core Competencies\n- Container orchestration and scaling\n- Automated deployment strategies\n- Infrastructure provisioning\n- Monitoring and alerting setup\n- Log aggregation and analysis\n- Security scanning and compliance\n- Performance optimization\n- Disaster recovery planning\n\n## Development Standards\n- Use Infrastructure as Code principles\n- Implement immutable deployments\n- Follow security best practices\n- Monitor all critical metrics\n- Automate repetitive tasks\n- Document infrastructure changes",
+  "inputs": [
+    {
+      "name": "featureDescription",
+      "type": "string",
+      "required": true,
+      "description": "Description of the DevOps feature to implement"
+    },
+    {
+      "name": "requirements",
+      "type": "array",
+      "required": true,
+      "description": "List of specific requirements for the feature"
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "required": false,
+      "description": "Cloud platform (aws, gcp, azure, on-premises)",
+      "default": "aws"
+    },
+    {
+      "name": "tools",
+      "type": "array",
+      "required": false,
+      "description": "DevOps tools to use (docker, kubernetes, terraform, ansible)"
+    },
+    {
+      "name": "cicd",
+      "type": "string",
+      "required": false,
+      "description": "CI/CD platform (github-actions, gitlab-ci, jenkins, circleci)",
+      "default": "github-actions"
+    },
+    {
+      "name": "targetFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific files to modify or create"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "implementedFiles",
+      "type": "array",
+      "description": "List of files created or modified"
+    },
+    {
+      "name": "infrastructure",
+      "type": "array",
+      "description": "Infrastructure configurations created"
+    },
+    {
+      "name": "pipelines",
+      "type": "array",
+      "description": "CI/CD pipeline files implemented"
+    },
+    {
+      "name": "containers",
+      "type": "array",
+      "description": "Docker and container configurations"
+    },
+    {
+      "name": "monitoring",
+      "type": "array",
+      "description": "Monitoring and alerting setup"
+    },
+    {
+      "name": "scripts",
+      "type": "array",
+      "description": "Automation scripts created"
+    },
+    {
+      "name": "documentation",
+      "type": "string",
+      "description": "Infrastructure and deployment documentation"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type execution"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category execution"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/sync-preview.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-execution.sh --node-id $NODE_ID --command $COMMAND"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/save-work.sh --node-id $NODE_ID --context-reset true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/handle-notification.sh --node-id $NODE_ID --type execution"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 45,
+    "estimatedTokens": 150000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "6GB",
+    "cpu": "4 cores"
+  },
+  "dependencies": ["docker-setup", "kubernetes-setup", "terraform-setup", "aws-setup"],
+  "tags": ["devops", "infrastructure", "cicd", "docker", "kubernetes", "terraform", "monitoring", "automation"]
+}

@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String   // Hashed with bcrypt
+  name          String?
+  role          String   @default("user") // user, admin
+  isActive      Boolean  @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  projects      Project[]
+  apiKeys       ApiKey[]
+  
+  @@map("users")
+  @@index([email])
+}
+
+model ApiKey {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key         String   @unique // Hashed API key
+  name        String   // Description/name for the key
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  
+  @@map("api_keys")
+  @@index([key])
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  flow        Json
+  status      String   @default("created")
+  userId      String?  // Optional for backward compatibility
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  executions  Execution[]
+  
+  @@map("projects")
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model Execution {
+  id          String   @id @default(uuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status      String   @default("pending")
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  errorMessage String?
+  metadata    Json?
+  
+  nodes       NodeExecution[]
+  
+  @@map("executions")
+  @@index([projectId])
+  @@index([status])
+  @@index([startedAt])
+  @@index([completedAt])
+}
+
+model NodeExecution {
+  id          String    @id @default(uuid())
+  executionId String
+  execution   Execution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  nodeId      String    // Flow node ID
+  agentType   String
+  status      String    @default("pending")
+  output      Json?
+  errorMessage String?
+  retryCount  Int       @default(0)
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+  
+  @@map("node_executions")
+  @@index([executionId, nodeId])
+  @@index([executionId])
+  @@index([status])
+  @@index([agentType])
+  @@index([startedAt])
+}

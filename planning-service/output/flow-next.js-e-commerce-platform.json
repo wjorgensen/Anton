@@ -1,0 +1,321 @@
+{
+  "id": "8603b7df-2f8f-4f35-a051-8653c714a396",
+  "version": 1,
+  "name": "Nextjs web project",
+  "description": "Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.",
+  "created": "2025-08-26T17:22:41.503Z",
+  "modified": "2025-08-26T17:22:41.503Z",
+  "nodes": [
+    {
+      "id": "node-1",
+      "agentId": "nextjs-setup",
+      "label": "Nextjs Setup",
+      "category": "setup",
+      "instructions": "Execute nextjs-setup agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {
+        "projectName": "build-a-full-stack",
+        "features": [
+          "authentication",
+          "database",
+          "testing",
+          "payment"
+        ],
+        "database": "postgres",
+        "authentication": "nextauth",
+        "testing": true
+      },
+      "position": {
+        "x": -141.9164862254636,
+        "y": 280
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 600,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-2",
+      "agentId": "react-developer",
+      "label": "React Developer",
+      "category": "execution",
+      "instructions": "Execute react-developer agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {
+        "features": [
+          "authentication",
+          "database",
+          "testing",
+          "payment"
+        ],
+        "technology": {
+          "frontend": [
+            "nextjs"
+          ],
+          "database": [
+            "postgres"
+          ],
+          "testing": [
+            "playwright",
+            "cypress"
+          ]
+        }
+      },
+      "position": {
+        "x": 227.19204226009776,
+        "y": 180
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 30
+    },
+    {
+      "id": "node-3",
+      "agentId": "database-developer",
+      "label": "Database Developer",
+      "category": "execution",
+      "instructions": "Execute database-developer agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {
+        "features": [
+          "authentication",
+          "database",
+          "testing",
+          "payment"
+        ],
+        "technology": {
+          "frontend": [
+            "nextjs"
+          ],
+          "database": [
+            "postgres"
+          ],
+          "testing": [
+            "playwright",
+            "cypress"
+          ]
+        }
+      },
+      "position": {
+        "x": 251.20978983848448,
+        "y": 500
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 30
+    },
+    {
+      "id": "node-4",
+      "agentId": "playwright-e2e",
+      "label": "Playwright E2e",
+      "category": "testing",
+      "instructions": "Execute playwright-e2e agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {},
+      "position": {
+        "x": 679.7109830774604,
+        "y": 280
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 900,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 20
+    },
+    {
+      "id": "node-5",
+      "agentId": "git-merger",
+      "label": "Git Merger",
+      "category": "integration",
+      "instructions": "Execute git-merger agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {},
+      "position": {
+        "x": 1032.1288283512283,
+        "y": 180
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 5
+    },
+    {
+      "id": "node-6",
+      "agentId": "db-migrator",
+      "label": "Db Migrator",
+      "category": "integration",
+      "instructions": "Execute db-migrator agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {},
+      "position": {
+        "x": 1054.940599590515,
+        "y": 500
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-7",
+      "agentId": "security-review",
+      "label": "Security Review",
+      "category": "review",
+      "instructions": "Execute security-review agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {},
+      "position": {
+        "x": 1418.134438623722,
+        "y": 180
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-8",
+      "agentId": "summarizer",
+      "label": "Summarizer",
+      "category": "utility",
+      "instructions": "Execute summarizer agent for project: Build a full-stack e-commerce platform with Next.js, featuring user authentication, product catalog, shopping cart, payment integration with Stripe, and comprehensive testing. Use PostgreSQL for the database and implement both unit and e2e tests.\n\nTechnology stack: {\"frontend\":[\"nextjs\"],\"database\":[\"postgres\"],\"testing\":[\"playwright\",\"cypress\"]}\nRequired features: authentication, database, testing, payment\nPreferences: {\"testing\":\"comprehensive\"}",
+      "inputs": {},
+      "position": {
+        "x": 1461.9164862254636,
+        "y": 500
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 5
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "node-1",
+      "target": "node-2",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-2",
+      "source": "node-1",
+      "target": "node-3",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-3",
+      "source": "node-2",
+      "target": "node-4",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-4",
+      "source": "node-3",
+      "target": "node-4",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-5",
+      "source": "node-4",
+      "target": "node-5",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-6",
+      "source": "node-4",
+      "target": "node-6",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-7",
+      "source": "node-5",
+      "target": "node-7",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-8",
+      "source": "node-5",
+      "target": "node-8",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-9",
+      "source": "node-6",
+      "target": "node-7",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-10",
+      "source": "node-6",
+      "target": "node-8",
+      "condition": {
+        "type": "success"
+      }
+    }
+  ],
+  "metadata": {
+    "projectType": "web",
+    "estimatedTotalTime": 85,
+    "estimatedTotalTokens": 400000,
+    "environment": {
+      "NODE_ENV": "development",
+      "PROJECT_TYPE": "web",
+      "DATABASE_URL": "postgresql://user:password@localhost:5432/dbname",
+      "AUTH_SECRET": "development-secret",
+      "NEXTAUTH_URL": "http://localhost:3000"
+    },
+    "secrets": [
+      "AUTH_SECRET",
+      "JWT_SECRET",
+      "STRIPE_SECRET_KEY",
+      "PAYMENT_API_KEY",
+      "DATABASE_URL",
+      "DB_PASSWORD"
+    ]
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "id": "mobile-developer",
+  "name": "Mobile Developer Agent",
+  "category": "execution",
+  "type": "mobile-developer",
+  "version": "1.0.0",
+  "description": "Specialized agent for developing React Native and Flutter mobile applications with cross-platform patterns and best practices",
+  "icon": "mobile",
+  "color": "#9C27B0",
+  "instructions": {
+    "base": "You are an expert mobile developer. Your role is to implement React Native and Flutter mobile applications, native integrations, and cross-platform features using modern mobile development patterns and best practices. You build performant and user-friendly mobile apps.",
+    "contextual": "Implement the following mobile feature: {{featureDescription}}. Requirements: {{requirements}}. Platform: {{platform}}. Framework: {{framework}}. Follow mobile UX principles and platform guidelines."
+  },
+  "claudeMD": "# Mobile Developer Agent\n\nExpert in mobile development with:\n- React Native cross-platform development\n- Flutter UI toolkit and Dart\n- Native module integration\n- State management (Redux, MobX, Riverpod)\n- Navigation patterns (React Navigation)\n- Mobile UI/UX principles\n- Device API integration\n- App store deployment\n\n## Core Competencies\n- Cross-platform component development\n- Native bridge integration\n- Mobile performance optimization\n- Responsive design patterns\n- Push notifications\n- Offline data synchronization\n- Camera and media handling\n- Location services integration\n\n## Development Standards\n- Follow platform design guidelines\n- Implement responsive layouts\n- Optimize for performance\n- Handle device permissions\n- Test on multiple devices\n- Implement proper error handling",
+  "inputs": [
+    {
+      "name": "featureDescription",
+      "type": "string",
+      "required": true,
+      "description": "Description of the mobile feature to implement"
+    },
+    {
+      "name": "requirements",
+      "type": "array",
+      "required": true,
+      "description": "List of specific requirements for the feature"
+    },
+    {
+      "name": "framework",
+      "type": "string",
+      "required": false,
+      "description": "Mobile framework (react-native, flutter, expo)",
+      "default": "react-native"
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "required": false,
+      "description": "Target platform (ios, android, both)",
+      "default": "both"
+    },
+    {
+      "name": "navigation",
+      "type": "string",
+      "required": false,
+      "description": "Navigation library (react-navigation, flutter-navigator)",
+      "default": "react-navigation"
+    },
+    {
+      "name": "targetFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific files to modify or create"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "implementedFiles",
+      "type": "array",
+      "description": "List of files created or modified"
+    },
+    {
+      "name": "screens",
+      "type": "array",
+      "description": "Mobile screens implemented"
+    },
+    {
+      "name": "components",
+      "type": "array",
+      "description": "Mobile components created"
+    },
+    {
+      "name": "navigation",
+      "type": "array",
+      "description": "Navigation configuration"
+    },
+    {
+      "name": "services",
+      "type": "array",
+      "description": "Mobile services implemented"
+    },
+    {
+      "name": "tests",
+      "type": "array",
+      "description": "Mobile test files created"
+    },
+    {
+      "name": "documentation",
+      "type": "string",
+      "description": "Documentation of mobile features"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type execution"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category execution"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/sync-preview.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-execution.sh --node-id $NODE_ID --command $COMMAND"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/save-work.sh --node-id $NODE_ID --context-reset true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/handle-notification.sh --node-id $NODE_ID --type execution"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 45,
+    "estimatedTokens": 135000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "6GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["react-native-setup", "flutter-setup", "expo-setup"],
+  "tags": ["mobile", "react-native", "flutter", "ios", "android", "cross-platform", "native", "development"]
+}

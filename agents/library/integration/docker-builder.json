@@ -1,0 +1,134 @@
+{
+  "id": "docker-builder",
+  "name": "Docker Builder Agent",
+  "category": "integration",
+  "type": "docker-builder",
+  "version": "1.0.0",
+  "description": "Specialized agent for Docker container building, image management, multi-stage builds, and deployment orchestration",
+  "icon": "docker",
+  "color": "#2496ED",
+  "instructions": {
+    "base": "You are a Docker containerization specialist. Your role is to build Docker images, manage containers, optimize Dockerfiles, handle multi-stage builds, and orchestrate deployments. You understand container best practices and security.",
+    "contextual": "Perform Docker operation: {{operation}}. Image: {{imageName}}. Platform: {{targetPlatform}}. Build context: {{buildContext}}. Deploy to: {{deployTarget}}."
+  },
+  "claudeMD": "# Docker Builder Agent\n\nExpert in Docker containerization and deployment:\n- Dockerfile optimization\n- Multi-stage build strategies\n- Image layer caching\n- Container orchestration\n- Security scanning\n- Registry management\n- Cross-platform builds\n- Deployment automation\n\n## Core Competencies\n- Docker image building and optimization\n- Container lifecycle management\n- Volume and network configuration\n- Health check implementation\n- Resource limit configuration\n- Security best practices\n- CI/CD pipeline integration\n- Kubernetes deployment preparation\n\n## Integration Standards\n- Follow Docker best practices\n- Minimize image size\n- Implement proper security measures\n- Use multi-stage builds effectively\n- Maintain image versioning\n- Ensure reproducible builds",
+  "inputs": [
+    {
+      "name": "operation",
+      "type": "string",
+      "required": true,
+      "description": "Docker operation to perform (build, deploy, push, run, compose)"
+    },
+    {
+      "name": "imageName",
+      "type": "string",
+      "required": false,
+      "description": "Docker image name and tag"
+    },
+    {
+      "name": "targetPlatform",
+      "type": "string",
+      "required": false,
+      "description": "Target platform for multi-arch builds",
+      "default": "linux/amd64"
+    },
+    {
+      "name": "buildContext",
+      "type": "string",
+      "required": false,
+      "description": "Docker build context path",
+      "default": "."
+    },
+    {
+      "name": "deployTarget",
+      "type": "string",
+      "required": false,
+      "description": "Deployment target (local, registry, kubernetes, swarm)"
+    },
+    {
+      "name": "buildArgs",
+      "type": "object",
+      "required": false,
+      "description": "Build arguments to pass to Docker build"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "buildStatus",
+      "type": "object",
+      "description": "Status of the Docker build operation"
+    },
+    {
+      "name": "imageId",
+      "type": "string",
+      "description": "ID of the built Docker image"
+    },
+    {
+      "name": "imageSize",
+      "type": "string",
+      "description": "Size of the built Docker image"
+    },
+    {
+      "name": "securityScan",
+      "type": "object",
+      "description": "Security scan results of the image"
+    },
+    {
+      "name": "deploymentConfig",
+      "type": "object",
+      "description": "Generated deployment configuration"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type integration"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-docker-ops.sh --node-id $NODE_ID --operation $OPERATION"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-docker-configs.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/subagent-complete.sh --parent $NODE_ID --type docker-build"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 15,
+    "estimatedTokens": 50000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "4GB",
+    "cpu": "4 cores"
+  },
+  "dependencies": [],
+  "tags": ["docker", "containerization", "build", "deployment", "orchestration", "registry", "multi-stage", "security"]
+}

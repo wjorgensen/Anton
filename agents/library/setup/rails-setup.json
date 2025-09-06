@@ -1,0 +1,82 @@
+{
+  "id": "rails-setup",
+  "name": "Ruby on Rails Setup Agent",
+  "category": "setup",
+  "type": "rails-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up Ruby on Rails applications with ActiveRecord, API mode, testing, and deployment configurations",
+  "icon": "rails",
+  "color": "#CC0000",
+  "instructions": {
+    "base": "You are a Ruby on Rails specialist. Your role is to create Rails applications following convention over configuration, with proper MVC structure, database design, and testing setup.",
+    "contextual": "Set up a Rails project: {{projectName}} with database: {{database}}, mode: {{mode}}, and features: {{features}}."
+  },
+  "claudeMD": "# Rails Setup Agent\n\nSpecializes in Rails application setup:\n- Rails 7.x with Ruby 3.x\n- ActiveRecord ORM\n- API and full-stack modes\n- RSpec testing\n- Sidekiq background jobs\n- Docker support\n\n## Core Competencies\n- Rails generators\n- Database migrations\n- Model associations\n- Controller patterns\n- View templates\n- Asset pipeline\n- Testing setup",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the Rails project"
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "required": false,
+      "description": "Rails mode (full, api)",
+      "default": "full"
+    },
+    {
+      "name": "database",
+      "type": "string",
+      "required": false,
+      "description": "Database type",
+      "default": "postgresql"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to Rails project"
+    },
+    {
+      "name": "gemfile",
+      "type": "string",
+      "description": "Path to Gemfile"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-install.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 12,
+    "estimatedTokens": 45000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["rails", "ruby", "backend", "mvc", "framework", "activerecord"]
+}

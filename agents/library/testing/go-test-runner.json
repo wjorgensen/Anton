@@ -1,0 +1,135 @@
+{
+  "id": "go-test-runner",
+  "name": "Go Test Runner Agent",
+  "category": "testing",
+  "type": "go-test-runner",
+  "version": "1.0.0",
+  "description": "Specialized agent for running Go tests, analyzing failures, generating test reports, and implementing test fixes with intelligent retry strategies",
+  "icon": "go",
+  "color": "#00ADD8",
+  "instructions": {
+    "base": "You are a Go testing specialist. Your role is to run tests, analyze failures, fix broken tests, write new tests, and ensure comprehensive test coverage. You understand Go's testing package, benchmarks, examples, and table-driven tests.",
+    "contextual": "Run Go tests for: {{testScope}}. Test files: {{testFiles}}. Coverage requirements: {{coverageThreshold}}. Fix any failures and ensure all tests pass."
+  },
+  "claudeMD": "# Go Test Runner Agent\n\nExpert in Go testing framework:\n- Go 1.21+ testing package\n- Unit and integration testing\n- Table-driven test patterns\n- Benchmark and performance testing\n- Example-based documentation testing\n- Coverage analysis with go test\n- Test debugging and fixing\n- Testify and other testing libraries\n\n## Core Competencies\n- Test function organization\n- Subtests and parallel execution\n- Mock generation and usage\n- Coverage profile analysis\n- Test failure diagnosis\n- Benchmark optimization\n- Race condition detection\n- Build constraint testing\n\n## Testing Standards\n- Achieve specified coverage\n- Fix all failing tests\n- Write idiomatic Go tests\n- Use table-driven patterns\n- Test error conditions\n- Benchmark critical paths",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (all, unit, integration, specific package)",
+      "default": "all"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific test files or packages to run"
+    },
+    {
+      "name": "coverageThreshold",
+      "type": "number",
+      "required": false,
+      "description": "Minimum coverage percentage required",
+      "default": 80
+    },
+    {
+      "name": "race",
+      "type": "boolean",
+      "required": false,
+      "description": "Enable race detector",
+      "default": true
+    },
+    {
+      "name": "benchmarks",
+      "type": "boolean",
+      "required": false,
+      "description": "Run benchmark tests",
+      "default": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Test execution results with pass/fail counts"
+    },
+    {
+      "name": "coverage",
+      "type": "object",
+      "description": "Code coverage report"
+    },
+    {
+      "name": "benchmarks",
+      "type": "array",
+      "description": "Benchmark results and performance metrics"
+    },
+    {
+      "name": "failures",
+      "type": "array",
+      "description": "Details of failed tests with error messages"
+    },
+    {
+      "name": "fixedTests",
+      "type": "array",
+      "description": "Tests that were fixed during execution"
+    },
+    {
+      "name": "newTests",
+      "type": "array",
+      "description": "New test files created"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework go"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 15,
+    "estimatedTokens": 65000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["go-backend"],
+  "tags": ["go", "testing", "golang", "unit-testing", "benchmarks", "coverage", "race-detection", "table-driven"]
+}

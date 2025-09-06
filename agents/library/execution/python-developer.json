@@ -1,0 +1,153 @@
+{
+  "id": "python-developer",
+  "name": "Python Developer Agent",
+  "category": "execution",
+  "type": "python-developer",
+  "version": "1.0.0",
+  "description": "Specialized agent for developing Python backend services, data processing pipelines, and applications with modern patterns and best practices",
+  "icon": "python",
+  "color": "#3776AB",
+  "instructions": {
+    "base": "You are an expert Python developer. Your role is to implement Python backend services, data processing pipelines, APIs, and business logic using modern Python patterns, type hints, and best practices. You write clean, maintainable, and testable code.",
+    "contextual": "Implement the following Python feature: {{featureDescription}}. Requirements: {{requirements}}. Framework: {{framework}}. Database: {{database}}. Follow Python best practices and PEP standards."
+  },
+  "claudeMD": "# Python Developer Agent\n\nExpert in Python development with:\n- FastAPI, Django, Flask frameworks\n- Async/await patterns and asyncio\n- Data processing with pandas, numpy\n- Database integration (SQLAlchemy, Django ORM)\n- Pydantic models and validation\n- Poetry/pip dependency management\n- Testing with pytest\n- Type hints and mypy\n\n## Core Competencies\n- RESTful API development\n- Database models and queries\n- Data validation and serialization\n- Background task processing\n- Caching strategies (Redis)\n- Authentication and authorization\n- Error handling and logging\n- Performance optimization\n\n## Development Standards\n- Follow PEP 8 style guide\n- Use type hints consistently\n- Implement proper exception handling\n- Write comprehensive tests\n- Document functions with docstrings\n- Use virtual environments",
+  "inputs": [
+    {
+      "name": "featureDescription",
+      "type": "string",
+      "required": true,
+      "description": "Description of the Python feature to implement"
+    },
+    {
+      "name": "requirements",
+      "type": "array",
+      "required": true,
+      "description": "List of specific requirements for the feature"
+    },
+    {
+      "name": "framework",
+      "type": "string",
+      "required": false,
+      "description": "Python framework (fastapi, django, flask, starlette)",
+      "default": "fastapi"
+    },
+    {
+      "name": "database",
+      "type": "string",
+      "required": false,
+      "description": "Database type (postgres, mongodb, mysql, sqlite)",
+      "default": "postgres"
+    },
+    {
+      "name": "targetFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific files to modify or create"
+    },
+    {
+      "name": "dependencies",
+      "type": "object",
+      "required": false,
+      "description": "Python packages and versions needed"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "implementedFiles",
+      "type": "array",
+      "description": "List of files created or modified"
+    },
+    {
+      "name": "endpoints",
+      "type": "array",
+      "description": "API endpoints implemented"
+    },
+    {
+      "name": "models",
+      "type": "array",
+      "description": "Database models created"
+    },
+    {
+      "name": "services",
+      "type": "array",
+      "description": "Service classes implemented"
+    },
+    {
+      "name": "tests",
+      "type": "array",
+      "description": "Test files created"
+    },
+    {
+      "name": "documentation",
+      "type": "string",
+      "description": "Documentation of implemented features"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type execution"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category execution"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/sync-preview.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-execution.sh --node-id $NODE_ID --command $COMMAND"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/save-work.sh --node-id $NODE_ID --context-reset true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/handle-notification.sh --node-id $NODE_ID --type execution"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 40,
+    "estimatedTokens": 125000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "4GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["fastapi-setup", "django-setup", "python-setup"],
+  "tags": ["python", "backend", "api", "data", "fastapi", "django", "flask", "development"]
+}

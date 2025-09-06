@@ -1,0 +1,94 @@
+{
+  "name": "Review Agent Hook Configuration",
+  "description": "Hook configuration for manual review agents",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo $(date +%s) > $CLAUDE_PROJECT_DIR/.review_start_time"
+          },
+          {
+            "type": "command",
+            "command": "echo '{\"status\": \"pending\", \"reviewerId\": null}' > $CLAUDE_PROJECT_DIR/.review_status.json"
+          },
+          {
+            "type": "command",
+            "command": "curl -s -X POST -H 'Content-Type: application/json' -d '{\"nodeId\": \"$NODE_ID\", \"event\": \"review-requested\"}' http://localhost:3002/api/hooks/review-start",
+            "continueOnError": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --exit-code $EXIT_CODE --session-id $SESSION_ID",
+            "timeout": 30000,
+            "retryOnFailure": true
+          },
+          {
+            "type": "command",
+            "command": "curl -s -X POST -H 'Content-Type: application/json' -d '{\"nodeId\": \"$NODE_ID\", \"event\": \"review-completed\", \"status\": \"$STATUS\"}' http://localhost:3002/api/hooks/review-complete",
+            "continueOnError": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"timestamp\": \"'$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")'\", \"feedback\": \"'$USER_INPUT'\"}' >> $CLAUDE_PROJECT_DIR/review_feedback.jsonl",
+            "continueOnError": true
+          },
+          {
+            "type": "command",
+            "command": "curl -s -X POST -H 'Content-Type: application/json' -d '{\"nodeId\": \"$NODE_ID\", \"feedback\": \"$USER_INPUT\"}' http://localhost:3002/api/hooks/review-feedback",
+            "continueOnError": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Reviewer viewing: $FILE_PATH\" >> $CLAUDE_PROJECT_DIR/review_activity.log",
+            "continueOnError": true
+          }
+        ]
+      }
+    ]
+  },
+  "reviewConfig": {
+    "requiresApproval": true,
+    "autoApproveTimeout": null,
+    "allowedActions": ["approve", "request-changes", "reject", "skip"],
+    "trackViewedFiles": true,
+    "captureScreenshots": false
+  },
+  "environment": {
+    "ORCHESTRATOR_URL": "http://localhost:3002",
+    "REVIEW_TIMEOUT": "1800000",
+    "ENABLE_NOTIFICATIONS": "true",
+    "NOTIFY_CHANNELS": "slack,email"
+  },
+  "security": {
+    "allowedCommands": [
+      "stop.sh",
+      "echo",
+      "curl",
+      "date"
+    ],
+    "maxExecutionTime": 5000,
+    "sandboxed": true,
+    "readOnlyMode": true
+  }
+}

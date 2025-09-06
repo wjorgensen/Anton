@@ -1,0 +1,82 @@
+{
+  "id": "flutter-setup",
+  "name": "Flutter Setup Agent",
+  "category": "setup",
+  "type": "flutter-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up Flutter mobile applications with state management, routing, and platform-specific configurations",
+  "icon": "flutter",
+  "color": "#02569B",
+  "instructions": {
+    "base": "You are a Flutter mobile development specialist. Your role is to create cross-platform Flutter applications with proper architecture, state management, and platform configurations.",
+    "contextual": "Set up a Flutter project: {{projectName}} with state management: {{stateManagement}}, platforms: {{platforms}}, and features: {{features}}."
+  },
+  "claudeMD": "# Flutter Setup Agent\n\nSpecializes in Flutter app setup:\n- Flutter 3.x with Dart\n- iOS and Android support\n- State management (Riverpod, Bloc, Provider)\n- Routing and navigation\n- Platform-specific code\n- Testing setup\n\n## Core Competencies\n- Project structure\n- Widget architecture\n- State management\n- Platform channels\n- Build configurations\n- Testing strategies",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the Flutter project"
+    },
+    {
+      "name": "platforms",
+      "type": "array",
+      "required": false,
+      "description": "Target platforms",
+      "default": ["ios", "android"]
+    },
+    {
+      "name": "stateManagement",
+      "type": "string",
+      "required": false,
+      "description": "State management solution",
+      "default": "riverpod"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to Flutter project"
+    },
+    {
+      "name": "pubspecYaml",
+      "type": "string",
+      "description": "Path to pubspec.yaml"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 15,
+    "estimatedTokens": 55000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "4GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["flutter", "dart", "mobile", "ios", "android", "cross-platform"]
+}

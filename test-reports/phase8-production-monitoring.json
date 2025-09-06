@@ -1,0 +1,602 @@
+{
+  "startTime": "2025-08-27T08:33:06.193Z",
+  "endTime": "2025-08-27T08:34:06.216Z",
+  "duration": 60021,
+  "environment": "production",
+  "healthChecks": [
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:06.196Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:11.197Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:16.198Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:21.200Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:26.202Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:31.203Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:36.205Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:41.206Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:46.207Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:51.210Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:33:56.211Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    },
+    {
+      "status": "healthy",
+      "timestamp": "2025-08-27T08:34:01.213Z",
+      "services": [
+        {
+          "service": "database",
+          "status": "healthy"
+        },
+        {
+          "service": "redis",
+          "status": "healthy"
+        },
+        {
+          "service": "filesystem",
+          "status": "healthy"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "snapshots": [
+      {
+        "timestamp": 1756283586196,
+        "realTime": {
+          "activeExecutions": 0,
+          "nodeCompletionRate": 90.77305418934161,
+          "hookSuccessRate": 90.16714654251021,
+          "webSocketConnections": 12,
+          "previewServers": 3
+        },
+        "performance": {
+          "apiResponseTime": 211.42650307155674,
+          "webSocketLatency": 23.904221324777545,
+          "dbQueryTime": 40.8312323431407,
+          "memoryUsage": 352.22800173375555,
+          "cpuUtilization": 30.08149724625514
+        },
+        "errors": {
+          "failedNodes": 1,
+          "hookFailures": 0,
+          "webSocketDisconnections": 1,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": false,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283591197,
+        "realTime": {
+          "activeExecutions": 6,
+          "nodeCompletionRate": 88.18572405975122,
+          "hookSuccessRate": 95.3495635979923,
+          "webSocketConnections": 11,
+          "previewServers": 1
+        },
+        "performance": {
+          "apiResponseTime": 130.87776233704736,
+          "webSocketLatency": 38.10209723588021,
+          "dbQueryTime": 34.224553652487906,
+          "memoryUsage": 379.3039386051288,
+          "cpuUtilization": 36.63352561801041
+        },
+        "errors": {
+          "failedNodes": 1,
+          "hookFailures": 0,
+          "webSocketDisconnections": 1,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283596198,
+        "realTime": {
+          "activeExecutions": 7,
+          "nodeCompletionRate": 91.87379730156637,
+          "hookSuccessRate": 97.98674635176947,
+          "webSocketConnections": 44,
+          "previewServers": 3
+        },
+        "performance": {
+          "apiResponseTime": 218.998542238665,
+          "webSocketLatency": 26.333557226656524,
+          "dbQueryTime": 41.51901001683161,
+          "memoryUsage": 205.05546066558375,
+          "cpuUtilization": 52.507387076481876
+        },
+        "errors": {
+          "failedNodes": 2,
+          "hookFailures": 1,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283601200,
+        "realTime": {
+          "activeExecutions": 7,
+          "nodeCompletionRate": 90.58837235920562,
+          "hookSuccessRate": 90.76782436219035,
+          "webSocketConnections": 45,
+          "previewServers": 2
+        },
+        "performance": {
+          "apiResponseTime": 155.75430257820096,
+          "webSocketLatency": 19.531540580739986,
+          "dbQueryTime": 13.627394487574714,
+          "memoryUsage": 458.94280971396563,
+          "cpuUtilization": 48.295753110235715
+        },
+        "errors": {
+          "failedNodes": 2,
+          "hookFailures": 0,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283606202,
+        "realTime": {
+          "activeExecutions": 1,
+          "nodeCompletionRate": 99.36563678743173,
+          "hookSuccessRate": 98.22764640923583,
+          "webSocketConnections": 12,
+          "previewServers": 3
+        },
+        "performance": {
+          "apiResponseTime": 104.90080704005531,
+          "webSocketLatency": 49.33261206990861,
+          "dbQueryTime": 31.746559325593555,
+          "memoryUsage": 313.3977221336654,
+          "cpuUtilization": 60.897155656188616
+        },
+        "errors": {
+          "failedNodes": 0,
+          "hookFailures": 1,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283611203,
+        "realTime": {
+          "activeExecutions": 0,
+          "nodeCompletionRate": 98.75479893881496,
+          "hookSuccessRate": 89.86560883163352,
+          "webSocketConnections": 49,
+          "previewServers": 3
+        },
+        "performance": {
+          "apiResponseTime": 86.18407513199804,
+          "webSocketLatency": 47.181385518875295,
+          "dbQueryTime": 51.4621573202771,
+          "memoryUsage": 438.0947803002696,
+          "cpuUtilization": 48.863779873645434
+        },
+        "errors": {
+          "failedNodes": 1,
+          "hookFailures": 1,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": false,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283616205,
+        "realTime": {
+          "activeExecutions": 9,
+          "nodeCompletionRate": 91.17236418615605,
+          "hookSuccessRate": 94.44176348405728,
+          "webSocketConnections": 16,
+          "previewServers": 4
+        },
+        "performance": {
+          "apiResponseTime": 229.71299861863184,
+          "webSocketLatency": 15.350728028977903,
+          "dbQueryTime": 9.55031940085603,
+          "memoryUsage": 248.47152756432942,
+          "cpuUtilization": 57.058532596300246
+        },
+        "errors": {
+          "failedNodes": 2,
+          "hookFailures": 1,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283621206,
+        "realTime": {
+          "activeExecutions": 2,
+          "nodeCompletionRate": 97.57330634854557,
+          "hookSuccessRate": 86.94469625243742,
+          "webSocketConnections": 47,
+          "previewServers": 4
+        },
+        "performance": {
+          "apiResponseTime": 118.22222038319667,
+          "webSocketLatency": 16.295564885262053,
+          "dbQueryTime": 10.354550015441639,
+          "memoryUsage": 308.1769729664757,
+          "cpuUtilization": 35.94607534206298
+        },
+        "errors": {
+          "failedNodes": 1,
+          "hookFailures": 0,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283626207,
+        "realTime": {
+          "activeExecutions": 2,
+          "nodeCompletionRate": 99.9954328205518,
+          "hookSuccessRate": 90.83311915709278,
+          "webSocketConnections": 22,
+          "previewServers": 3
+        },
+        "performance": {
+          "apiResponseTime": 173.96997086533813,
+          "webSocketLatency": 44.72367942787354,
+          "dbQueryTime": 6.851714544726346,
+          "memoryUsage": 401.0368970103016,
+          "cpuUtilization": 36.91718844139931
+        },
+        "errors": {
+          "failedNodes": 0,
+          "hookFailures": 1,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": false,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283631210,
+        "realTime": {
+          "activeExecutions": 3,
+          "nodeCompletionRate": 85.39767540749442,
+          "hookSuccessRate": 87.62332777836566,
+          "webSocketConnections": 8,
+          "previewServers": 4
+        },
+        "performance": {
+          "apiResponseTime": 180.49298355140988,
+          "webSocketLatency": 30.45623764432396,
+          "dbQueryTime": 28.61745069066933,
+          "memoryUsage": 395.628477826545,
+          "cpuUtilization": 48.089640992844366
+        },
+        "errors": {
+          "failedNodes": 0,
+          "hookFailures": 0,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283636211,
+        "realTime": {
+          "activeExecutions": 6,
+          "nodeCompletionRate": 80.38528335161227,
+          "hookSuccessRate": 92.24731232379592,
+          "webSocketConnections": 3,
+          "previewServers": 1
+        },
+        "performance": {
+          "apiResponseTime": 106.84059700249028,
+          "webSocketLatency": 22.618632511619232,
+          "dbQueryTime": 18.867231070884866,
+          "memoryUsage": 217.9608953350505,
+          "cpuUtilization": 52.56264431805687
+        },
+        "errors": {
+          "failedNodes": 2,
+          "hookFailures": 0,
+          "webSocketDisconnections": 0,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": false,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      },
+      {
+        "timestamp": 1756283641213,
+        "realTime": {
+          "activeExecutions": 4,
+          "nodeCompletionRate": 87.66586405393902,
+          "hookSuccessRate": 86.61124066207543,
+          "webSocketConnections": 29,
+          "previewServers": 2
+        },
+        "performance": {
+          "apiResponseTime": 134.21875029298778,
+          "webSocketLatency": 30.088086139860074,
+          "dbQueryTime": 20.51351105961769,
+          "memoryUsage": 332.320321169622,
+          "cpuUtilization": 62.832564965705785
+        },
+        "errors": {
+          "failedNodes": 1,
+          "hookFailures": 0,
+          "webSocketDisconnections": 1,
+          "uncaughtExceptions": 0
+        },
+        "health": {
+          "servicesHealthy": true,
+          "databaseConnected": true,
+          "redisAvailable": true,
+          "diskSpaceAdequate": true
+        }
+      }
+    ],
+    "summary": {}
+  },
+  "alerts": {},
+  "performance": {
+    "averageApiResponseTime": 31.444116425594725,
+    "averageMemoryUsage": 321.781414348608,
+    "averageCpuUtilization": 53.45939937449757,
+    "maxMemoryUsage": 708.9107611186807,
+    "maxCpuUtilization": 68.47707342013979
+  },
+  "errors": {
+    "total": 4,
+    "byType": {
+      "failedNodes": 0,
+      "hookFailures": 1,
+      "webSocketDisconnections": 2,
+      "uncaughtExceptions": 1
+    }
+  },
+  "stability": {
+    "uptime": 99.41163953558616,
+    "serviceAvailability": 97.96334475988242,
+    "errorRate": 4.930250234258041
+  },
+  "recommendations": [
+    "💾 Memory usage peaked above 600MB. Review for memory leaks and optimize data structures."
+  ]
+}

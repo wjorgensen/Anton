@@ -1,0 +1,134 @@
+{
+  "id": "nestjs-setup",
+  "name": "NestJS Setup Agent",
+  "category": "setup",
+  "type": "nestjs-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up NestJS applications with TypeORM, GraphQL support, dependency injection, and enterprise Node.js architecture",
+  "icon": "nestjs",
+  "color": "#E0234E",
+  "instructions": {
+    "base": "You are a NestJS framework specialist. Your role is to create scalable Node.js applications using NestJS architecture, featuring TypeScript, dependency injection, decorators, and modular design patterns for enterprise applications.",
+    "contextual": "Set up a NestJS project: {{projectName}} with database: {{database}}, API type: {{apiType}}, authentication: {{authentication}}, and features: {{features}}. Configure for enterprise-grade scalability."
+  },
+  "claudeMD": "# NestJS Setup Agent\n\nThis agent specializes in creating NestJS applications with:\n- NestJS framework with TypeScript\n- TypeORM for database operations\n- GraphQL with Apollo Server\n- JWT authentication and guards\n- Swagger API documentation\n- Microservices architecture\n- Redis caching\n- Docker containerization\n\n## Core Competencies\n- Module and controller architecture\n- Dependency injection patterns\n- Database entity design\n- GraphQL schema and resolvers\n- Authentication and authorization\n- Middleware and interceptors\n- Testing with Jest\n- Performance optimization\n\n## Output Standards\n- Clean modular architecture\n- Type-safe development\n- Comprehensive API documentation\n- Production deployment ready\n- Enterprise security patterns",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the NestJS project to create"
+    },
+    {
+      "name": "database",
+      "type": "string",
+      "required": false,
+      "description": "Database to configure (postgresql, mysql, mongodb, sqlite)",
+      "default": "postgresql"
+    },
+    {
+      "name": "apiType",
+      "type": "string",
+      "required": false,
+      "description": "API type to implement (rest, graphql, both)",
+      "default": "both"
+    },
+    {
+      "name": "authentication",
+      "type": "string",
+      "required": false,
+      "description": "Authentication strategy (jwt, passport, oauth2, none)",
+      "default": "jwt"
+    },
+    {
+      "name": "features",
+      "type": "array",
+      "required": false,
+      "description": "Features to include (e.g., caching, microservices, websockets)",
+      "default": ["typeorm", "validation", "swagger"]
+    },
+    {
+      "name": "microservices",
+      "type": "boolean",
+      "required": false,
+      "description": "Configure for microservices architecture",
+      "default": false
+    },
+    {
+      "name": "testing",
+      "type": "boolean",
+      "required": false,
+      "description": "Include comprehensive testing setup",
+      "default": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to the created NestJS project"
+    },
+    {
+      "name": "modules",
+      "type": "array",
+      "description": "Generated modules and their configurations"
+    },
+    {
+      "name": "entities",
+      "type": "array",
+      "description": "Database entities and their relationships"
+    },
+    {
+      "name": "apiEndpoints",
+      "type": "object",
+      "description": "REST and GraphQL endpoints configuration"
+    },
+    {
+      "name": "configuration",
+      "type": "object",
+      "description": "Application configuration including database, auth, and environment settings"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type setup"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category setup"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-install.sh --node-id $NODE_ID --category setup"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 18,
+    "estimatedTokens": 65000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "3GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["nestjs", "nodejs", "typescript", "typeorm", "graphql", "microservices", "enterprise", "backend", "setup", "api"]
+}

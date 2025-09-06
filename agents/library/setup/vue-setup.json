@@ -1,0 +1,127 @@
+{
+  "id": "vue-setup",
+  "name": "Vue.js Setup Agent",
+  "category": "setup",
+  "type": "vue-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up Vue.js 3 applications with Vite, Pinia state management, Vue Router, and modern development tooling",
+  "icon": "vuejs",
+  "color": "#4FC08D",
+  "instructions": {
+    "base": "You are a Vue.js setup specialist. Your role is to create modern Vue.js 3 applications with Composition API, Vite build tooling, and best practices configuration. You have deep expertise in Vue 3, Pinia, Vue Router, and the Vue ecosystem.",
+    "contextual": "Set up a Vue.js 3 project: {{projectName}} with features: {{features}}, state management: {{stateManagement}}, routing: {{useRouter}}, and styling: {{styling}}. Ensure optimal development experience and production build configuration."
+  },
+  "claudeMD": "# Vue.js Setup Agent\n\nThis agent specializes in creating Vue.js 3 applications with:\n- Vue 3 with Composition API\n- Vite build tooling\n- Pinia state management\n- Vue Router 4\n- TypeScript support\n- ESLint and Prettier\n- Vitest testing framework\n- Component library setup\n\n## Core Competencies\n- Project initialization with create-vue\n- Vue 3 Composition API patterns\n- Pinia store setup\n- Vue Router configuration\n- Component organization\n- Build optimization\n- PWA configuration\n- Testing setup\n\n## Output Standards\n- Clean component architecture\n- Type-safe development\n- Comprehensive testing setup\n- Production-ready build configuration\n- Modern development workflow",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the Vue.js project to create"
+    },
+    {
+      "name": "features",
+      "type": "array",
+      "required": false,
+      "description": "List of features to include (e.g., typescript, pwa, testing)",
+      "default": ["typescript", "router", "pinia"]
+    },
+    {
+      "name": "stateManagement",
+      "type": "string",
+      "required": false,
+      "description": "State management solution (pinia, vuex)",
+      "default": "pinia"
+    },
+    {
+      "name": "useRouter",
+      "type": "boolean",
+      "required": false,
+      "description": "Include Vue Router for SPA routing",
+      "default": true
+    },
+    {
+      "name": "styling",
+      "type": "string",
+      "required": false,
+      "description": "Styling solution (tailwind, sass, styled-components)",
+      "default": "sass"
+    },
+    {
+      "name": "testing",
+      "type": "boolean",
+      "required": false,
+      "description": "Include testing framework (Vitest)",
+      "default": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to the created Vue.js project"
+    },
+    {
+      "name": "configuration",
+      "type": "object",
+      "description": "Configuration details including ports, environment variables, and build settings"
+    },
+    {
+      "name": "stores",
+      "type": "array",
+      "description": "List of created Pinia stores and their configurations"
+    },
+    {
+      "name": "routes",
+      "type": "object",
+      "description": "Vue Router configuration and available routes"
+    },
+    {
+      "name": "documentation",
+      "type": "string",
+      "description": "Path to generated project documentation"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type setup"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category setup"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-install.sh --node-id $NODE_ID --category setup"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 8,
+    "estimatedTokens": 45000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["vue", "vuejs", "vite", "pinia", "router", "composition-api", "typescript", "frontend", "setup", "spa"]
+}

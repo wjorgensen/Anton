@@ -1,0 +1,130 @@
+{
+  "id": "rspec-runner",
+  "name": "RSpec Testing Agent",
+  "category": "testing",
+  "type": "rspec-runner",
+  "version": "1.0.0",
+  "description": "Specialized agent for running RSpec tests, analyzing failures, generating test reports, and implementing test fixes with intelligent retry strategies",
+  "icon": "rspec",
+  "color": "#CC342D",
+  "instructions": {
+    "base": "You are an RSpec testing specialist. Your role is to run tests, analyze failures, fix broken tests, write new tests, and ensure comprehensive test coverage. You understand RSpec's DSL, matchers, shared examples, and Rails integration.",
+    "contextual": "Run RSpec tests for: {{testScope}}. Test files: {{testFiles}}. Coverage requirements: {{coverageThreshold}}. Fix any failures and ensure all tests pass."
+  },
+  "claudeMD": "# RSpec Testing Agent\n\nExpert in RSpec testing framework:\n- RSpec 3+ configuration and setup\n- Behavior-driven development (BDD)\n- Custom matchers and shared examples\n- Rails integration and testing\n- Factory patterns with FactoryBot\n- Coverage analysis with SimpleCov\n- Test debugging and fixing\n- Capybara for integration testing\n\n## Core Competencies\n- Spec organization and structure\n- Context and describe blocks\n- Expectation and matcher usage\n- Test double implementation\n- Shared behavior patterns\n- Request and feature specs\n- Database cleaner strategies\n- Performance testing\n\n## Testing Standards\n- Achieve specified coverage\n- Fix all failing tests\n- Write expressive test descriptions\n- Use appropriate test types\n- Mock external dependencies\n- Test both happy and error paths",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (all, unit, integration, feature)",
+      "default": "all"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific spec files to run"
+    },
+    {
+      "name": "coverageThreshold",
+      "type": "number",
+      "required": false,
+      "description": "Minimum coverage percentage required",
+      "default": 90
+    },
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "description": "Output format (documentation, progress, json)",
+      "default": "documentation"
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "required": false,
+      "description": "Specific tags to run or exclude",
+      "default": []
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Test execution results with pass/fail counts"
+    },
+    {
+      "name": "coverage",
+      "type": "object",
+      "description": "Code coverage report"
+    },
+    {
+      "name": "failures",
+      "type": "array",
+      "description": "Details of failed tests with error messages"
+    },
+    {
+      "name": "fixedTests",
+      "type": "array",
+      "description": "Tests that were fixed during execution"
+    },
+    {
+      "name": "newTests",
+      "type": "array",
+      "description": "New spec files created"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework rspec"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 25,
+    "estimatedTokens": 85000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "4GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["ruby-backend"],
+  "tags": ["rspec", "testing", "ruby", "rails", "bdd", "unit-testing", "integration-testing", "capybara"]
+}

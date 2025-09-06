@@ -1,0 +1,134 @@
+{
+  "id": "db-migrator",
+  "name": "Database Migration Agent",
+  "category": "integration",
+  "type": "db-migrator",
+  "version": "1.0.0",
+  "description": "Specialized agent for database migrations, schema updates, data transformations, and database synchronization across environments",
+  "icon": "database",
+  "color": "#059669",
+  "instructions": {
+    "base": "You are a database migration specialist. Your role is to handle schema changes, data migrations, backup operations, rollback procedures, and database synchronization. You understand SQL, NoSQL, and various database systems.",
+    "contextual": "Perform database migration: {{operation}}. Source DB: {{sourceDatabase}}. Target DB: {{targetDatabase}}. Migration type: {{migrationType}}. Backup required: {{requiresBackup}}."
+  },
+  "claudeMD": "# Database Migration Agent\n\nExpert in database migrations and schema management:\n- Schema version control\n- Data migration strategies\n- Rollback procedures\n- Database synchronization\n- Index optimization\n- Constraint management\n- Data validation\n- Performance monitoring\n\n## Core Competencies\n- Migration script generation\n- Data type conversion\n- Foreign key management\n- Backup and restore operations\n- Migration testing\n- Zero-downtime migrations\n- Cross-database compatibility\n- Data integrity validation\n\n## Integration Standards\n- Follow database best practices\n- Ensure data integrity\n- Implement proper rollback mechanisms\n- Test migrations thoroughly\n- Monitor performance impact\n- Maintain audit trails",
+  "inputs": [
+    {
+      "name": "operation",
+      "type": "string",
+      "required": true,
+      "description": "Migration operation to perform (migrate, rollback, sync, backup)"
+    },
+    {
+      "name": "sourceDatabase",
+      "type": "string",
+      "required": false,
+      "description": "Source database connection string or identifier"
+    },
+    {
+      "name": "targetDatabase",
+      "type": "string",
+      "required": false,
+      "description": "Target database connection string or identifier"
+    },
+    {
+      "name": "migrationType",
+      "type": "string",
+      "required": false,
+      "description": "Type of migration (schema, data, full, incremental)",
+      "default": "incremental"
+    },
+    {
+      "name": "requiresBackup",
+      "type": "boolean",
+      "required": false,
+      "description": "Whether to create backup before migration",
+      "default": true
+    },
+    {
+      "name": "migrationFiles",
+      "type": "array",
+      "required": false,
+      "description": "List of migration files to execute"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "migrationStatus",
+      "type": "object",
+      "description": "Status of the migration operation"
+    },
+    {
+      "name": "appliedMigrations",
+      "type": "array",
+      "description": "List of migrations that were successfully applied"
+    },
+    {
+      "name": "rollbackScript",
+      "type": "string",
+      "description": "Generated rollback script for the migration"
+    },
+    {
+      "name": "backupLocation",
+      "type": "string",
+      "description": "Location of the database backup"
+    },
+    {
+      "name": "validationResults",
+      "type": "object",
+      "description": "Data integrity validation results"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type integration"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-db-ops.sh --node-id $NODE_ID --operation $OPERATION"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-migration-files.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/subagent-complete.sh --parent $NODE_ID --type db-migration"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 25,
+    "estimatedTokens": 80000,
+    "requiresGPU": false,
+    "maxRetries": 2,
+    "memory": "4GB",
+    "cpu": "4 cores"
+  },
+  "dependencies": [],
+  "tags": ["database", "migration", "schema", "sql", "backup", "rollback", "data-integrity", "synchronization"]
+}

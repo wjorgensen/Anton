@@ -1,0 +1,130 @@
+{
+  "id": "playwright-e2e",
+  "name": "Playwright E2E Testing Agent",
+  "category": "testing",
+  "type": "playwright-e2e",
+  "version": "1.0.0",
+  "description": "Specialized agent for running Playwright end-to-end tests, analyzing failures, generating test reports, and implementing test fixes with intelligent retry strategies",
+  "icon": "playwright",
+  "color": "#2EAD33",
+  "instructions": {
+    "base": "You are a Playwright end-to-end testing specialist. Your role is to run E2E tests, analyze failures, fix broken tests, write new tests, and ensure comprehensive test coverage. You understand browser automation, page objects, test parallelization, and cross-browser testing.",
+    "contextual": "Run Playwright E2E tests for: {{testScope}}. Test files: {{testFiles}}. Browsers: {{browsers}}. Fix any failures and ensure all tests pass."
+  },
+  "claudeMD": "# Playwright E2E Testing Agent\n\nExpert in Playwright end-to-end testing:\n- Playwright 1.40+ configuration and setup\n- Cross-browser testing (Chromium, Firefox, Safari)\n- Page object model implementation\n- Test parallelization and sharding\n- Visual regression testing\n- API testing integration\n- Test debugging and fixing\n- CI/CD pipeline integration\n\n## Core Competencies\n- Browser automation\n- Element interaction strategies\n- Wait strategies and stability\n- Screenshot and video recording\n- Test failure diagnosis\n- Mock and intercept network requests\n- Custom fixtures and utilities\n- Performance testing\n\n## Testing Standards\n- Achieve stable test execution\n- Fix all flaky tests\n- Write maintainable page objects\n- Use proper wait strategies\n- Mock external dependencies\n- Test across multiple browsers",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (all, smoke, regression, specific)",
+      "default": "all"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific test files to run"
+    },
+    {
+      "name": "browsers",
+      "type": "array",
+      "required": false,
+      "description": "Browsers to test against",
+      "default": ["chromium"]
+    },
+    {
+      "name": "headed",
+      "type": "boolean",
+      "required": false,
+      "description": "Run tests in headed mode",
+      "default": false
+    },
+    {
+      "name": "workers",
+      "type": "number",
+      "required": false,
+      "description": "Number of parallel workers",
+      "default": 1
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Test execution results with pass/fail counts"
+    },
+    {
+      "name": "screenshots",
+      "type": "array",
+      "description": "Screenshots captured during test execution"
+    },
+    {
+      "name": "failures",
+      "type": "array",
+      "description": "Details of failed tests with error messages and traces"
+    },
+    {
+      "name": "fixedTests",
+      "type": "array",
+      "description": "Tests that were fixed during execution"
+    },
+    {
+      "name": "newTests",
+      "type": "array",
+      "description": "New test files created"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework playwright"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 30,
+    "estimatedTokens": 100000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "8GB",
+    "cpu": "4 cores"
+  },
+  "dependencies": ["nodejs-backend", "react-developer"],
+  "tags": ["playwright", "testing", "e2e", "browser-automation", "end-to-end", "javascript", "typescript", "cross-browser"]
+}

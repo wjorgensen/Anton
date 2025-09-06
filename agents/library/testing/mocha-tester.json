@@ -1,0 +1,130 @@
+{
+  "id": "mocha-tester",
+  "name": "Mocha Testing Agent",
+  "category": "testing",
+  "type": "mocha-tester",
+  "version": "1.0.0",
+  "description": "Specialized agent for running Mocha tests, analyzing failures, generating test reports, and implementing test fixes with intelligent retry strategies",
+  "icon": "mocha",
+  "color": "#8D6748",
+  "instructions": {
+    "base": "You are a Mocha testing specialist. Your role is to run tests, analyze failures, fix broken tests, write new tests, and ensure comprehensive test coverage. You understand Mocha's BDD/TDD interfaces, hooks, and assertion libraries.",
+    "contextual": "Run Mocha tests for: {{testScope}}. Test files: {{testFiles}}. Interface: {{interface}}. Fix any failures and ensure all tests pass."
+  },
+  "claudeMD": "# Mocha Testing Agent\n\nExpert in Mocha testing framework:\n- Mocha 10+ configuration and setup\n- BDD and TDD testing interfaces\n- Flexible assertion library integration\n- Asynchronous testing support\n- Custom reporters and output\n- Coverage integration with nyc\n- Test debugging and fixing\n- Browser and Node.js testing\n\n## Core Competencies\n- Test suite organization\n- Hook management (before, after, etc.)\n- Promise and callback testing\n- Custom reporter implementation\n- Test failure diagnosis\n- Assertion library usage\n- Test timeout handling\n- Parallel test execution\n\n## Testing Standards\n- Achieve comprehensive coverage\n- Fix all failing tests\n- Write clear test descriptions\n- Use appropriate hooks\n- Handle async operations properly\n- Implement proper teardown",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (all, unit, integration, specific)",
+      "default": "all"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific test files to run"
+    },
+    {
+      "name": "interface",
+      "type": "string",
+      "required": false,
+      "description": "Test interface to use (bdd, tdd, qunit, exports)",
+      "default": "bdd"
+    },
+    {
+      "name": "reporter",
+      "type": "string",
+      "required": false,
+      "description": "Test reporter to use",
+      "default": "spec"
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "required": false,
+      "description": "Test timeout in milliseconds",
+      "default": 2000
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Test execution results with pass/fail counts"
+    },
+    {
+      "name": "coverage",
+      "type": "object",
+      "description": "Code coverage report (when using nyc)"
+    },
+    {
+      "name": "failures",
+      "type": "array",
+      "description": "Details of failed tests with error messages"
+    },
+    {
+      "name": "fixedTests",
+      "type": "array",
+      "description": "Tests that were fixed during execution"
+    },
+    {
+      "name": "newTests",
+      "type": "array",
+      "description": "New test files created"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework mocha"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 20,
+    "estimatedTokens": 70000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "3GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["nodejs-backend"],
+  "tags": ["mocha", "testing", "javascript", "nodejs", "unit-testing", "bdd", "tdd", "assertion"]
+}

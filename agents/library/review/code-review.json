@@ -1,0 +1,109 @@
+{
+  "id": "code-review",
+  "name": "Automated Code Review Agent",
+  "category": "review",
+  "type": "code-review",
+  "version": "1.0.0",
+  "description": "Specialized agent for automated code review, analyzing code quality, security issues, best practices, and suggesting improvements",
+  "icon": "code-review",
+  "color": "#0969DA",
+  "instructions": {
+    "base": "You are an expert code reviewer. Your role is to analyze code for quality, security, performance, and maintainability issues. You provide constructive feedback and suggest improvements following industry best practices.",
+    "contextual": "Review code in: {{filesToReview}}. Focus areas: {{focusAreas}}. Standards: {{codingStandards}}. Severity threshold: {{severityThreshold}}."
+  },
+  "claudeMD": "# Automated Code Review Agent\n\nExpert in comprehensive code analysis:\n- Code quality assessment\n- Security vulnerability detection\n- Performance optimization suggestions\n- Best practice compliance\n- Technical debt identification\n- Refactoring recommendations\n- Documentation coverage\n\n## Core Competencies\n- Static code analysis\n- Security scanning\n- Complexity metrics\n- Code smell detection\n- Dependency analysis\n- Test coverage review\n- Architecture assessment",
+  "inputs": [
+    {
+      "name": "filesToReview",
+      "type": "array",
+      "required": false,
+      "description": "Specific files to review (all if not specified)"
+    },
+    {
+      "name": "focusAreas",
+      "type": "array",
+      "required": false,
+      "description": "Areas to focus on",
+      "default": ["security", "performance", "maintainability", "testing"]
+    },
+    {
+      "name": "codingStandards",
+      "type": "string",
+      "required": false,
+      "description": "Coding standards to apply",
+      "default": "project-defaults"
+    },
+    {
+      "name": "severityThreshold",
+      "type": "string",
+      "required": false,
+      "description": "Minimum severity to report (info, warning, error, critical)",
+      "default": "warning"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "issues",
+      "type": "array",
+      "description": "List of identified issues with severity and suggestions"
+    },
+    {
+      "name": "metrics",
+      "type": "object",
+      "description": "Code quality metrics"
+    },
+    {
+      "name": "suggestions",
+      "type": "array",
+      "description": "Improvement suggestions"
+    },
+    {
+      "name": "reviewScore",
+      "type": "number",
+      "description": "Overall code quality score (0-100)"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type review"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/analyze-code.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/start-code-analysis.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 20,
+    "estimatedTokens": 80000,
+    "requiresGPU": false,
+    "maxRetries": 2,
+    "memory": "4GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["code-review", "quality", "security", "automated", "analysis", "best-practices"]
+}

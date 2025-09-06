@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border-primary;
+  }
+  
+  body {
+    @apply bg-bg-primary text-text-primary font-sans;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .agent-node {
+    @apply bg-bg-secondary border border-border-primary rounded-lg transition-all duration-200;
+  }
+  
+  .agent-node:hover {
+    @apply border-accent-primary;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  
+  .agent-node.selected {
+    @apply border-accent-primary border-2;
+  }
+  
+  /* Node Animation Classes */
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes scaleIn {
+    0% {
+      transform: scale(0) rotate(-180deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2) rotate(-90deg);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+  
+  .animate-pulse-glow {
+    animation: pulseGlow 2s infinite ease-in-out;
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+    }
+  }
+  
+  .glow-effect {
+    box-shadow: 
+      0 0 20px rgba(59, 130, 246, 0.5),
+      inset 0 0 10px rgba(59, 130, 246, 0.1);
+  }
+  
+  .glass-panel {
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(10px);
+    @apply border border-border-primary;
+  }
+  
+  .neon-text {
+    @apply text-accent-primary;
+    text-shadow: 
+      0 0 10px rgba(59, 130, 246, 0.5),
+      0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  
+  .btn-primary {
+    @apply bg-accent-primary text-white border-none px-4 py-2 rounded-md font-medium transition-all duration-200;
+  }
+  
+  .btn-primary:hover {
+    @apply bg-accent-hover;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent text-text-primary border border-border-primary px-4 py-2 rounded-md font-medium transition-all duration-200;
+  }
+  
+  .btn-secondary:hover {
+    @apply border-border-secondary;
+  }
+}
+
+/* React Flow Overrides */
+.react-flow__renderer {
+  background: #000000;
+}
+
+.react-flow__edge-path {
+  stroke: #404040;
+  stroke-width: 2.5;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 4px rgba(64, 64, 64, 0.5));
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: #3B82F6;
+  stroke-width: 3;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+}
+
+/* Animated flowing connections */
+.react-flow__edge-path.animated {
+  stroke-dasharray: 8 4;
+  animation: flowingEdge 2s linear infinite;
+}
+
+@keyframes flowingEdge {
+  from {
+    stroke-dashoffset: 12;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Connection line while dragging */
+.react-flow__connectionline {
+  stroke: #3B82F6;
+  stroke-width: 3;
+  stroke-dasharray: 8 4;
+  animation: flowingEdge 2s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+}
+
+/* Edge labels */
+.react-flow__edge-text {
+  font-size: 10px;
+  fill: #9CA3AF;
+}
+
+.react-flow__edge.selected .react-flow__edge-text {
+  fill: #3B82F6;
+}
+
+/* Custom edge markers */
+.react-flow__arrowhead {
+  fill: #404040;
+  transition: fill 0.3s ease;
+}
+
+.react-flow__edge.selected .react-flow__arrowhead,
+.react-flow__edge:hover .react-flow__arrowhead {
+  fill: #3B82F6;
+  filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.6));
+}
+
+.react-flow__controls {
+  @apply bg-bg-secondary border border-border-primary;
+  box-shadow: none;
+}
+
+.react-flow__controls-button {
+  @apply bg-bg-secondary border-border-primary text-text-primary;
+}
+
+.react-flow__controls-button:hover {
+  @apply bg-bg-tertiary;
+}
+
+.react-flow__minimap {
+  @apply bg-bg-secondary border border-border-primary;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(59, 130, 246, 0.2);
+  stroke: #3B82F6;
+}

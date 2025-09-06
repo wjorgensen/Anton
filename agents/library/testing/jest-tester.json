@@ -1,0 +1,135 @@
+{
+  "id": "jest-tester",
+  "name": "Jest Testing Agent",
+  "category": "testing",
+  "type": "jest-tester",
+  "version": "1.0.0",
+  "description": "Specialized agent for running Jest tests, analyzing failures, generating test reports, and implementing test fixes with intelligent retry strategies",
+  "icon": "jest",
+  "color": "#C21325",
+  "instructions": {
+    "base": "You are a Jest testing specialist. Your role is to run tests, analyze failures, fix broken tests, write new tests, and ensure comprehensive test coverage. You understand Jest configuration, mocking, async testing, and snapshot testing.",
+    "contextual": "Run Jest tests for: {{testScope}}. Test files: {{testFiles}}. Coverage requirements: {{coverageThreshold}}. Fix any failures and ensure all tests pass."
+  },
+  "claudeMD": "# Jest Testing Agent\n\nExpert in Jest testing framework:\n- Jest 29+ configuration and setup\n- Unit and integration testing\n- React Testing Library integration\n- Mocking and stubbing\n- Snapshot testing\n- Coverage analysis\n- Test debugging and fixing\n- Performance testing\n\n## Core Competencies\n- Test suite organization\n- Async test handling\n- Mock implementation\n- Coverage report analysis\n- Test failure diagnosis\n- Fixture management\n- Custom matchers\n- Test optimization\n\n## Testing Standards\n- Achieve specified coverage\n- Fix all failing tests\n- Write meaningful test descriptions\n- Use proper setup/teardown\n- Mock external dependencies\n- Test edge cases",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (all, unit, integration, specific)",
+      "default": "all"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific test files to run"
+    },
+    {
+      "name": "coverageThreshold",
+      "type": "object",
+      "required": false,
+      "description": "Coverage thresholds for branches, functions, lines, statements",
+      "default": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    {
+      "name": "watch",
+      "type": "boolean",
+      "required": false,
+      "description": "Run tests in watch mode",
+      "default": false
+    },
+    {
+      "name": "updateSnapshots",
+      "type": "boolean",
+      "required": false,
+      "description": "Update Jest snapshots",
+      "default": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Test execution results with pass/fail counts"
+    },
+    {
+      "name": "coverage",
+      "type": "object",
+      "description": "Code coverage report"
+    },
+    {
+      "name": "failures",
+      "type": "array",
+      "description": "Details of failed tests with error messages"
+    },
+    {
+      "name": "fixedTests",
+      "type": "array",
+      "description": "Tests that were fixed during execution"
+    },
+    {
+      "name": "newTests",
+      "type": "array",
+      "description": "New test files created"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework jest"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 20,
+    "estimatedTokens": 80000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "4GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["react-developer", "nodejs-backend"],
+  "tags": ["jest", "testing", "javascript", "typescript", "unit-testing", "integration-testing", "coverage", "tdd"]
+}

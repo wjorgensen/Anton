@@ -1,0 +1,127 @@
+{
+  "id": "angular-setup",
+  "name": "Angular Setup Agent",
+  "category": "setup",
+  "type": "angular-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up Angular 17 applications with TypeScript, RxJS, Angular CLI, and enterprise-ready configurations",
+  "icon": "angular",
+  "color": "#DD0031",
+  "instructions": {
+    "base": "You are an Angular framework specialist. Your role is to create robust Angular applications with TypeScript, RxJS reactive programming, Angular CLI tooling, and enterprise-grade architecture patterns.",
+    "contextual": "Set up an Angular 17 project: {{projectName}} with features: {{features}}, routing: {{useRouter}}, state management: {{stateManagement}}, and UI framework: {{uiFramework}}. Configure for scalable enterprise development."
+  },
+  "claudeMD": "# Angular Setup Agent\n\nThis agent specializes in creating Angular 17 applications with:\n- Angular 17 with standalone components\n- TypeScript strict mode\n- RxJS reactive patterns\n- Angular CLI and schematics\n- Angular Material or PrimeNG\n- NgRx for complex state management\n- Jest and Cypress testing\n- PWA capabilities\n\n## Core Competencies\n- Project generation with Angular CLI\n- Component and service architecture\n- Dependency injection patterns\n- Reactive forms and validation\n- HTTP client and interceptors\n- Route guards and lazy loading\n- Build optimization\n- Testing strategies\n\n## Output Standards\n- Clean architecture with feature modules\n- Type-safe development\n- Comprehensive test coverage\n- Production-ready build configuration\n- Enterprise development patterns",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the Angular project to create"
+    },
+    {
+      "name": "features",
+      "type": "array",
+      "required": false,
+      "description": "List of features to include (e.g., pwa, testing, ssr)",
+      "default": ["routing", "typescript", "material"]
+    },
+    {
+      "name": "useRouter",
+      "type": "boolean",
+      "required": false,
+      "description": "Include Angular Router for navigation",
+      "default": true
+    },
+    {
+      "name": "stateManagement",
+      "type": "string",
+      "required": false,
+      "description": "State management solution (ngrx, akita, simple-services)",
+      "default": "ngrx"
+    },
+    {
+      "name": "uiFramework",
+      "type": "string",
+      "required": false,
+      "description": "UI component library (material, primeng, ng-bootstrap)",
+      "default": "material"
+    },
+    {
+      "name": "testing",
+      "type": "string",
+      "required": false,
+      "description": "Testing framework setup (jest, karma, cypress)",
+      "default": "jest"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to the created Angular project"
+    },
+    {
+      "name": "angularJson",
+      "type": "object",
+      "description": "Angular workspace configuration"
+    },
+    {
+      "name": "modules",
+      "type": "array",
+      "description": "Generated feature modules and their configurations"
+    },
+    {
+      "name": "services",
+      "type": "array",
+      "description": "Core services and their dependency injection setup"
+    },
+    {
+      "name": "routes",
+      "type": "object",
+      "description": "Application routing configuration"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type setup"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category setup"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-install.sh --node-id $NODE_ID --category setup"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 15,
+    "estimatedTokens": 60000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "3GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["angular", "typescript", "rxjs", "ngrx", "material", "cli", "enterprise", "frontend", "setup", "spa"]
+}

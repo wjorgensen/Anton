@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-08-27T11:10:41.074Z",
+  "totalAgents": 52,
+  "testedAgents": 0,
+  "summary": {
+    "allAgentsHaveStopHook": true,
+    "avgExecutionTime": null,
+    "totalErrors": 0,
+    "successRate": null
+  },
+  "byCategory": {},
+  "byHookType": {
+    "Start": 0,
+    "Stop": 0,
+    "FileChange": 0,
+    "TestResult": 0,
+    "ReviewComplete": 0,
+    "DeploymentStatus": 0
+  },
+  "agentDetails": [],
+  "recommendations": [
+    "Consider adding FileChange hooks to more agents for better tracking"
+  ]
+}

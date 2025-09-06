@@ -1,0 +1,134 @@
+{
+  "id": "fastapi-setup",
+  "name": "FastAPI Setup Agent",
+  "category": "setup",
+  "type": "fastapi-setup",
+  "version": "1.0.0",
+  "description": "Specialized agent for setting up FastAPI applications with async support, Pydantic models, SQLAlchemy ORM, and modern Python API development",
+  "icon": "fastapi",
+  "color": "#009688",
+  "instructions": {
+    "base": "You are a FastAPI specialist. Your role is to create high-performance Python APIs with FastAPI, featuring async/await patterns, automatic API documentation, Pydantic validation, and modern Python development practices.",
+    "contextual": "Set up a FastAPI project: {{projectName}} with database: {{database}}, authentication: {{authentication}}, features: {{features}}, and async patterns: {{useAsync}}. Configure for production deployment."
+  },
+  "claudeMD": "# FastAPI Setup Agent\n\nThis agent specializes in creating FastAPI applications with:\n- FastAPI with async/await support\n- Pydantic v2 for data validation\n- SQLAlchemy 2.0 with async support\n- Alembic for database migrations\n- JWT authentication\n- Automatic OpenAPI documentation\n- Docker containerization\n- Poetry dependency management\n\n## Core Competencies\n- API route organization\n- Database model design\n- Dependency injection\n- Background tasks with Celery\n- File upload handling\n- WebSocket support\n- Testing with pytest\n- Performance optimization\n\n## Output Standards\n- Clean API architecture\n- Comprehensive documentation\n- Type hints throughout\n- Production-ready configuration\n- Security best practices",
+  "inputs": [
+    {
+      "name": "projectName",
+      "type": "string",
+      "required": true,
+      "description": "Name of the FastAPI project to create"
+    },
+    {
+      "name": "database",
+      "type": "string",
+      "required": false,
+      "description": "Database to configure (postgresql, mysql, sqlite, mongodb)",
+      "default": "postgresql"
+    },
+    {
+      "name": "authentication",
+      "type": "string",
+      "required": false,
+      "description": "Authentication method (jwt, oauth2, basic, none)",
+      "default": "jwt"
+    },
+    {
+      "name": "features",
+      "type": "array",
+      "required": false,
+      "description": "Features to include (e.g., websockets, background-tasks, file-upload)",
+      "default": ["async", "validation", "documentation"]
+    },
+    {
+      "name": "useAsync",
+      "type": "boolean",
+      "required": false,
+      "description": "Use async/await patterns throughout",
+      "default": true
+    },
+    {
+      "name": "orm",
+      "type": "string",
+      "required": false,
+      "description": "ORM to use (sqlalchemy, tortoise, none)",
+      "default": "sqlalchemy"
+    },
+    {
+      "name": "testing",
+      "type": "boolean",
+      "required": false,
+      "description": "Include testing framework setup",
+      "default": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "projectPath",
+      "type": "string",
+      "description": "Path to the created FastAPI project"
+    },
+    {
+      "name": "apiEndpoints",
+      "type": "array",
+      "description": "List of created API endpoints and their configurations"
+    },
+    {
+      "name": "models",
+      "type": "array",
+      "description": "Database models and Pydantic schemas"
+    },
+    {
+      "name": "configuration",
+      "type": "object",
+      "description": "Application configuration including database, auth, and environment settings"
+    },
+    {
+      "name": "documentation",
+      "type": "string",
+      "description": "URL to automatically generated API documentation"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type setup"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category setup"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-install.sh --node-id $NODE_ID --category setup"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 12,
+    "estimatedTokens": 55000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["fastapi", "python", "async", "api", "pydantic", "sqlalchemy", "backend", "rest", "setup", "microservice"]
+}

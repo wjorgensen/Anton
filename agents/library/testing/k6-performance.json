@@ -1,0 +1,136 @@
+{
+  "id": "k6-performance",
+  "name": "K6 Performance Testing Agent",
+  "category": "testing",
+  "type": "k6-performance",
+  "version": "1.0.0",
+  "description": "Specialized agent for running K6 performance tests, analyzing results, generating performance reports, and implementing performance fixes with intelligent retry strategies",
+  "icon": "k6",
+  "color": "#7D64FF",
+  "instructions": {
+    "base": "You are a K6 performance testing specialist. Your role is to run load tests, analyze performance metrics, fix performance issues, write new performance tests, and ensure systems meet performance requirements. You understand K6 scripting, metrics, thresholds, and distributed testing.",
+    "contextual": "Run K6 performance tests for: {{testScope}}. Test files: {{testFiles}}. Load profile: {{loadProfile}}. Performance thresholds: {{thresholds}}. Analyze results and identify performance bottlenecks."
+  },
+  "claudeMD": "# K6 Performance Testing Agent\n\nExpert in K6 performance testing:\n- K6 0.45+ configuration and scripting\n- Load, stress, and spike testing\n- Performance metrics and thresholds\n- HTTP and WebSocket testing\n- Custom metrics and checks\n- Distributed testing setup\n- Performance analysis and optimization\n- CI/CD integration and reporting\n\n## Core Competencies\n- Test script development\n- Load profile configuration\n- Threshold and SLA definition\n- Metric analysis and interpretation\n- Performance bottleneck identification\n- Test data management\n- Result visualization\n- Performance regression detection\n\n## Testing Standards\n- Meet defined SLA thresholds\n- Identify performance bottlenecks\n- Write maintainable test scripts\n- Use appropriate load patterns\n- Monitor system resources\n- Provide actionable recommendations",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (load, stress, spike, soak)",
+      "default": "load"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific K6 test files to run"
+    },
+    {
+      "name": "loadProfile",
+      "type": "object",
+      "required": false,
+      "description": "Load testing configuration",
+      "default": {
+        "vus": 10,
+        "duration": "30s"
+      }
+    },
+    {
+      "name": "thresholds",
+      "type": "object",
+      "required": false,
+      "description": "Performance thresholds and SLAs",
+      "default": {
+        "http_req_duration": ["p(95)<500"],
+        "http_req_failed": ["rate<0.01"]
+      }
+    },
+    {
+      "name": "outputFormat",
+      "type": "string",
+      "required": false,
+      "description": "Output format for results",
+      "default": "json"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Performance test execution results"
+    },
+    {
+      "name": "metrics",
+      "type": "object",
+      "description": "Performance metrics and statistics"
+    },
+    {
+      "name": "thresholdViolations",
+      "type": "array",
+      "description": "SLA threshold violations and failures"
+    },
+    {
+      "name": "recommendations",
+      "type": "array",
+      "description": "Performance optimization recommendations"
+    },
+    {
+      "name": "reports",
+      "type": "array",
+      "description": "Generated performance reports and visualizations"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework k6"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 30,
+    "estimatedTokens": 60000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "2GB",
+    "cpu": "4 cores"
+  },
+  "dependencies": ["nodejs-backend"],
+  "tags": ["k6", "testing", "performance", "load-testing", "stress-testing", "metrics", "sla", "benchmarking"]
+}

@@ -1,0 +1,135 @@
+{
+  "id": "git-merger",
+  "name": "Git Merge Integration Agent",
+  "category": "integration",
+  "type": "git-merger",
+  "version": "1.0.0",
+  "description": "Specialized agent for Git operations including merging, conflict resolution, branch management, and repository synchronization",
+  "icon": "git",
+  "color": "#F05032",
+  "instructions": {
+    "base": "You are a Git version control specialist. Your role is to handle Git operations including merges, conflict resolution, branch creation, commits, and repository management. You understand Git workflows, merge strategies, and conflict resolution patterns.",
+    "contextual": "Perform Git operation: {{operation}}. Source branch: {{sourceBranch}}. Target branch: {{targetBranch}}. Strategy: {{mergeStrategy}}. Handle conflicts: {{handleConflicts}}."
+  },
+  "claudeMD": "# Git Merge Integration Agent\n\nExpert in Git version control operations:\n- Branch management and merging\n- Conflict detection and resolution\n- Merge strategies (fast-forward, recursive, ours, theirs)\n- Repository synchronization\n- Git hooks and workflows\n- Commit history management\n- Pull request creation\n- Git flow and GitHub flow\n\n## Core Competencies\n- Branch creation and deletion\n- Merge conflict resolution\n- Rebase operations\n- Cherry-picking commits\n- Stash management\n- Tag management\n- Submodule handling\n- Git hooks configuration\n\n## Integration Standards\n- Follow project's Git workflow\n- Write meaningful commit messages\n- Preserve commit history\n- Handle conflicts intelligently\n- Ensure clean merges\n- Update remote repositories",
+  "inputs": [
+    {
+      "name": "operation",
+      "type": "string",
+      "required": true,
+      "description": "Git operation to perform (merge, rebase, pull-request, sync)"
+    },
+    {
+      "name": "sourceBranch",
+      "type": "string",
+      "required": false,
+      "description": "Source branch for merge/rebase operations"
+    },
+    {
+      "name": "targetBranch",
+      "type": "string",
+      "required": false,
+      "description": "Target branch for merge/rebase operations",
+      "default": "main"
+    },
+    {
+      "name": "mergeStrategy",
+      "type": "string",
+      "required": false,
+      "description": "Merge strategy to use (recursive, ours, theirs, octopus)",
+      "default": "recursive"
+    },
+    {
+      "name": "handleConflicts",
+      "type": "boolean",
+      "required": false,
+      "description": "Whether to automatically resolve conflicts",
+      "default": true
+    },
+    {
+      "name": "commitMessage",
+      "type": "string",
+      "required": false,
+      "description": "Custom commit message for merge"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "mergeStatus",
+      "type": "object",
+      "description": "Status of the merge operation"
+    },
+    {
+      "name": "conflicts",
+      "type": "array",
+      "description": "List of conflicts encountered and resolved"
+    },
+    {
+      "name": "modifiedFiles",
+      "type": "array",
+      "description": "Files modified during the operation"
+    },
+    {
+      "name": "commitHash",
+      "type": "string",
+      "description": "Hash of the merge commit"
+    },
+    {
+      "name": "pullRequestUrl",
+      "type": "string",
+      "description": "URL of created pull request (if applicable)"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type integration"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-git-ops.sh --node-id $NODE_ID --operation $OPERATION"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-conflict-resolution.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/subagent-complete.sh --parent $NODE_ID --type git-merge"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 15,
+    "estimatedTokens": 60000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["git", "version-control", "merge", "integration", "conflicts", "branch", "repository"]
+}

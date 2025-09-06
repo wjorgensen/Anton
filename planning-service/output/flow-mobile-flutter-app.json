@@ -1,0 +1,608 @@
+{
+  "id": "c82fd6a1-6f1d-40b3-b022-4460f3321296",
+  "version": 1,
+  "name": "Flutter web project",
+  "description": "Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.",
+  "created": "2025-08-26T17:22:41.538Z",
+  "modified": "2025-08-26T17:22:41.538Z",
+  "nodes": [
+    {
+      "id": "node-1",
+      "agentId": "flutter-setup",
+      "label": "Flutter Setup",
+      "category": "setup",
+      "instructions": "Execute flutter-setup agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {
+        "projectName": "build-a-cross-platform",
+        "features": [
+          "authentication",
+          "database",
+          "api",
+          "testing",
+          "deployment",
+          "messaging"
+        ],
+        "authentication": "nextauth",
+        "testing": true
+      },
+      "position": {
+        "x": -144.3274976796988,
+        "y": -100
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 600,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-2",
+      "agentId": "react-developer",
+      "label": "React Developer",
+      "category": "execution",
+      "instructions": "Execute react-developer agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {
+        "features": [
+          "authentication",
+          "database",
+          "api",
+          "testing",
+          "deployment",
+          "messaging"
+        ],
+        "technology": {
+          "frontend": [
+            "flutter"
+          ],
+          "testing": [
+            "cypress"
+          ],
+          "backend": [
+            "nodejs"
+          ]
+        }
+      },
+      "position": {
+        "x": 274.6109041318033,
+        "y": -300
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 30
+    },
+    {
+      "id": "node-3",
+      "agentId": "nodejs-backend",
+      "label": "Nodejs Backend",
+      "category": "execution",
+      "instructions": "Execute nodejs-backend agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 215.86917994067772,
+        "y": 20
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 15
+    },
+    {
+      "id": "node-4",
+      "agentId": "database-developer",
+      "label": "Database Developer",
+      "category": "execution",
+      "instructions": "Execute database-developer agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {
+        "features": [
+          "authentication",
+          "database",
+          "api",
+          "testing",
+          "deployment",
+          "messaging"
+        ],
+        "technology": {
+          "frontend": [
+            "flutter"
+          ],
+          "testing": [
+            "cypress"
+          ],
+          "backend": [
+            "nodejs"
+          ]
+        }
+      },
+      "position": {
+        "x": 233.6392392280448,
+        "y": 340
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 30
+    },
+    {
+      "id": "node-5",
+      "agentId": "api-developer",
+      "label": "Api Developer",
+      "category": "execution",
+      "instructions": "Execute api-developer agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {
+        "features": [
+          "authentication",
+          "database",
+          "api",
+          "testing",
+          "deployment",
+          "messaging"
+        ],
+        "technology": {
+          "frontend": [
+            "flutter"
+          ],
+          "testing": [
+            "cypress"
+          ],
+          "backend": [
+            "nodejs"
+          ]
+        }
+      },
+      "position": {
+        "x": 228.01717968916574,
+        "y": 660
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 30
+    },
+    {
+      "id": "node-6",
+      "agentId": "playwright-e2e",
+      "label": "Playwright E2e",
+      "category": "testing",
+      "instructions": "Execute playwright-e2e agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 617.6233043970713,
+        "y": -100
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 900,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 20
+    },
+    {
+      "id": "node-7",
+      "agentId": "git-merger",
+      "label": "Git Merger",
+      "category": "integration",
+      "instructions": "Execute git-merger agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 1054.0389252767034,
+        "y": -300
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 5
+    },
+    {
+      "id": "node-8",
+      "agentId": "api-integrator",
+      "label": "Api Integrator",
+      "category": "integration",
+      "instructions": "Execute api-integrator agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 1036.1655968291418,
+        "y": 20
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 15
+    },
+    {
+      "id": "node-9",
+      "agentId": "db-migrator",
+      "label": "Db Migrator",
+      "category": "integration",
+      "instructions": "Execute db-migrator agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 984.067931981142,
+        "y": 340
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-10",
+      "agentId": "docker-builder",
+      "label": "Docker Builder",
+      "category": "integration",
+      "instructions": "Execute docker-builder agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 999.2970913949334,
+        "y": 660
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 600,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 15
+    },
+    {
+      "id": "node-11",
+      "agentId": "ci-cd-runner",
+      "label": "Ci Cd Runner",
+      "category": "integration",
+      "instructions": "Execute ci-cd-runner agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {
+        "testingLevel": "comprehensive",
+        "coverage": 80
+      },
+      "position": {
+        "x": 1010.6960178095667,
+        "y": 980
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-12",
+      "agentId": "security-review",
+      "label": "Security Review",
+      "category": "review",
+      "instructions": "Execute security-review agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 1426.4695073630344,
+        "y": -300
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 10
+    },
+    {
+      "id": "node-13",
+      "agentId": "deployment",
+      "label": "Deployment",
+      "category": "utility",
+      "instructions": "Execute deployment agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 1464.3274976796988,
+        "y": 20
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 20
+    },
+    {
+      "id": "node-14",
+      "agentId": "summarizer",
+      "label": "Summarizer",
+      "category": "utility",
+      "instructions": "Execute summarizer agent for project: Build a cross-platform mobile application using Flutter with user authentication, offline support, push notifications, and API integration. Include comprehensive testing and deployment setup.\n\nTechnology stack: {\"frontend\":[\"flutter\"],\"testing\":[\"cypress\"],\"backend\":[\"nodejs\"]}\nRequired features: authentication, database, api, testing, deployment, messaging\nPreferences: {\"testing\":\"comprehensive\",\"deployment\":true}",
+      "inputs": {},
+      "position": {
+        "x": 1437.1026680463742,
+        "y": 340
+      },
+      "config": {
+        "retryOnFailure": true,
+        "maxRetries": 3,
+        "timeout": 300,
+        "requiresReview": false
+      },
+      "status": "pending",
+      "estimatedTime": 5
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "node-1",
+      "target": "node-2",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-2",
+      "source": "node-1",
+      "target": "node-3",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-3",
+      "source": "node-1",
+      "target": "node-4",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-4",
+      "source": "node-1",
+      "target": "node-5",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-5",
+      "source": "node-2",
+      "target": "node-6",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-6",
+      "source": "node-3",
+      "target": "node-6",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-7",
+      "source": "node-4",
+      "target": "node-6",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-8",
+      "source": "node-5",
+      "target": "node-6",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-9",
+      "source": "node-6",
+      "target": "node-7",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-10",
+      "source": "node-6",
+      "target": "node-8",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-11",
+      "source": "node-6",
+      "target": "node-9",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-12",
+      "source": "node-6",
+      "target": "node-10",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-13",
+      "source": "node-6",
+      "target": "node-11",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-14",
+      "source": "node-7",
+      "target": "node-12",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-15",
+      "source": "node-7",
+      "target": "node-13",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-16",
+      "source": "node-7",
+      "target": "node-14",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-17",
+      "source": "node-8",
+      "target": "node-12",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-18",
+      "source": "node-8",
+      "target": "node-13",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-19",
+      "source": "node-8",
+      "target": "node-14",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-20",
+      "source": "node-9",
+      "target": "node-12",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-21",
+      "source": "node-9",
+      "target": "node-13",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-22",
+      "source": "node-9",
+      "target": "node-14",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-23",
+      "source": "node-10",
+      "target": "node-12",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-24",
+      "source": "node-10",
+      "target": "node-13",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-25",
+      "source": "node-10",
+      "target": "node-14",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-26",
+      "source": "node-11",
+      "target": "node-12",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-27",
+      "source": "node-11",
+      "target": "node-13",
+      "condition": {
+        "type": "success"
+      }
+    },
+    {
+      "id": "edge-28",
+      "source": "node-11",
+      "target": "node-14",
+      "condition": {
+        "type": "success"
+      }
+    }
+  ],
+  "metadata": {
+    "projectType": "web",
+    "estimatedTotalTime": 105,
+    "estimatedTotalTokens": 700000,
+    "environment": {
+      "NODE_ENV": "development",
+      "PROJECT_TYPE": "web",
+      "AUTH_SECRET": "development-secret",
+      "NEXTAUTH_URL": "http://localhost:3000"
+    },
+    "secrets": [
+      "AUTH_SECRET",
+      "JWT_SECRET",
+      "API_KEY",
+      "API_SECRET"
+    ]
+  }
+}

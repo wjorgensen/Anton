@@ -1,0 +1,613 @@
+{
+  "timestamp": "2025-08-27T11:12:55.153Z",
+  "environment": {
+    "nodeVersion": "v18.18.0",
+    "platform": "darwin",
+    "testMode": "mock"
+  },
+  "results": [
+    {
+      "testName": "Simple Flow",
+      "startTime": 1756293064678,
+      "endTime": 1756293070287,
+      "duration": 5609,
+      "nodes": {
+        "setup": {
+          "status": "completed",
+          "duration": 1980,
+          "output": [
+            "Node setup executed successfully"
+          ]
+        },
+        "execute": {
+          "status": "completed",
+          "duration": 1376,
+          "output": [
+            "Node execute executed successfully"
+          ]
+        },
+        "test": {
+          "status": "completed",
+          "duration": 2253,
+          "output": [
+            "Node test executed successfully"
+          ]
+        }
+      },
+      "completionRate": 1,
+      "memoryUsage": {
+        "start": 6.066062927246094,
+        "peak": 7.299581909179687,
+        "end": 6.082984924316406
+      },
+      "errors": [],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.7896716570584442
+    },
+    {
+      "testName": "Complex Flow",
+      "startTime": 1756293070288,
+      "endTime": 1756293099992,
+      "duration": 29704,
+      "nodes": {
+        "analyze": {
+          "status": "completed",
+          "duration": 2806,
+          "output": [
+            "Node analyze executed successfully"
+          ]
+        },
+        "db-setup": {
+          "status": "completed",
+          "duration": 1887,
+          "output": [
+            "Node db-setup executed successfully"
+          ]
+        },
+        "redis-setup": {
+          "status": "completed",
+          "duration": 1405,
+          "output": [
+            "Node redis-setup executed successfully"
+          ]
+        },
+        "frontend-setup": {
+          "status": "completed",
+          "duration": 2396,
+          "output": [
+            "Node frontend-setup executed successfully"
+          ]
+        },
+        "api-dev": {
+          "status": "completed",
+          "duration": 2785,
+          "output": [
+            "Node api-dev executed successfully"
+          ]
+        },
+        "frontend-dev": {
+          "status": "completed",
+          "duration": 2015,
+          "output": [
+            "Node frontend-dev executed successfully"
+          ]
+        },
+        "admin-dev": {
+          "status": "completed",
+          "duration": 2620,
+          "output": [
+            "Node admin-dev executed successfully"
+          ]
+        },
+        "worker-dev": {
+          "status": "completed",
+          "duration": 2372,
+          "output": [
+            "Node worker-dev executed successfully"
+          ]
+        },
+        "api-test": {
+          "status": "completed",
+          "duration": 2623,
+          "output": [
+            "Node api-test executed successfully"
+          ]
+        },
+        "ui-test": {
+          "status": "completed",
+          "duration": 2065,
+          "output": [
+            "Node ui-test executed successfully"
+          ]
+        },
+        "integration-test": {
+          "status": "completed",
+          "duration": 2720,
+          "output": [
+            "Node integration-test executed successfully"
+          ]
+        },
+        "review": {
+          "status": "completed",
+          "duration": 2636,
+          "output": [
+            "Node review executed successfully"
+          ]
+        },
+        "deploy": {
+          "status": "completed",
+          "duration": 1373,
+          "output": [
+            "Node deploy executed successfully"
+          ]
+        }
+      },
+      "completionRate": 1,
+      "memoryUsage": {
+        "start": 6.088951110839844,
+        "peak": 7.306741333007812,
+        "end": 4.938987731933594
+      },
+      "errors": [],
+      "parallelEfficiency": 0.3333221115001347,
+      "dependencyAccuracy": 0.8785326082831648
+    },
+    {
+      "testName": "Error Handling",
+      "startTime": 1756293099993,
+      "endTime": 1756293109904,
+      "duration": 9911,
+      "nodes": {
+        "good-setup": {
+          "status": "completed",
+          "duration": 1492,
+          "output": [
+            "Node good-setup executed successfully"
+          ]
+        },
+        "bad-agent": {
+          "status": "completed",
+          "duration": 1697,
+          "output": [
+            "Node bad-agent executed successfully"
+          ]
+        },
+        "dependent": {
+          "status": "completed",
+          "duration": 2538,
+          "output": [
+            "Node dependent executed successfully"
+          ]
+        },
+        "recovery": {
+          "status": "completed",
+          "duration": 1316,
+          "output": [
+            "Node recovery executed successfully"
+          ]
+        },
+        "fallback": {
+          "status": "completed",
+          "duration": 2868,
+          "output": [
+            "Node fallback executed successfully"
+          ]
+        }
+      },
+      "completionRate": 1,
+      "memoryUsage": {
+        "start": 4.9528045654296875,
+        "peak": 5.9921630859374995,
+        "end": 4.99346923828125
+      },
+      "errors": [],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.9294968842713339
+    },
+    {
+      "testName": "Performance Test",
+      "startTime": 1756293109905,
+      "endTime": 1756293162293,
+      "duration": 52388,
+      "nodes": {
+        "node-0-0": {
+          "status": "completed",
+          "duration": 2514,
+          "output": [
+            "Node node-0-0 executed successfully"
+          ]
+        },
+        "node-0-1": {
+          "status": "completed",
+          "duration": 1160,
+          "output": [
+            "Node node-0-1 executed successfully"
+          ]
+        },
+        "node-0-2": {
+          "status": "completed",
+          "duration": 2127,
+          "output": [
+            "Node node-0-2 executed successfully"
+          ]
+        },
+        "node-0-3": {
+          "status": "completed",
+          "duration": 2726,
+          "output": [
+            "Node node-0-3 executed successfully"
+          ]
+        },
+        "node-0-4": {
+          "status": "completed",
+          "duration": 2810,
+          "output": [
+            "Node node-0-4 executed successfully"
+          ]
+        },
+        "node-1-0": {
+          "status": "completed",
+          "duration": 2387,
+          "output": [
+            "Node node-1-0 executed successfully"
+          ]
+        },
+        "node-1-1": {
+          "status": "failed",
+          "duration": 2518,
+          "error": "Simulated error in node node-1-1",
+          "retries": 0
+        },
+        "node-1-2": {
+          "status": "completed",
+          "duration": 1349,
+          "output": [
+            "Node node-1-2 executed successfully"
+          ]
+        },
+        "node-1-3": {
+          "status": "completed",
+          "duration": 2540,
+          "output": [
+            "Node node-1-3 executed successfully"
+          ]
+        },
+        "node-1-4": {
+          "status": "completed",
+          "duration": 2468,
+          "output": [
+            "Node node-1-4 executed successfully"
+          ]
+        },
+        "node-2-0": {
+          "status": "completed",
+          "duration": 2257,
+          "output": [
+            "Node node-2-0 executed successfully"
+          ]
+        },
+        "node-2-1": {
+          "status": "completed",
+          "duration": 2963,
+          "output": [
+            "Node node-2-1 executed successfully"
+          ]
+        },
+        "node-2-2": {
+          "status": "completed",
+          "duration": 1278,
+          "output": [
+            "Node node-2-2 executed successfully"
+          ]
+        },
+        "node-2-3": {
+          "status": "failed",
+          "duration": 2674,
+          "error": "Simulated error in node node-2-3",
+          "retries": 0
+        },
+        "node-2-4": {
+          "status": "completed",
+          "duration": 2411,
+          "output": [
+            "Node node-2-4 executed successfully"
+          ]
+        },
+        "node-3-0": {
+          "status": "completed",
+          "duration": 1607,
+          "output": [
+            "Node node-3-0 executed successfully"
+          ]
+        },
+        "node-3-1": {
+          "status": "completed",
+          "duration": 1424,
+          "output": [
+            "Node node-3-1 executed successfully"
+          ]
+        },
+        "node-3-2": {
+          "status": "completed",
+          "duration": 1075,
+          "output": [
+            "Node node-3-2 executed successfully"
+          ]
+        },
+        "node-3-3": {
+          "status": "completed",
+          "duration": 1661,
+          "output": [
+            "Node node-3-3 executed successfully"
+          ]
+        },
+        "node-3-4": {
+          "status": "completed",
+          "duration": 2519,
+          "output": [
+            "Node node-3-4 executed successfully"
+          ]
+        },
+        "node-4-0": {
+          "status": "failed",
+          "duration": 2169,
+          "error": "Simulated error in node node-4-0",
+          "retries": 2
+        },
+        "node-4-1": {
+          "status": "completed",
+          "duration": 2173,
+          "output": [
+            "Node node-4-1 executed successfully"
+          ]
+        },
+        "node-4-2": {
+          "status": "completed",
+          "duration": 1873,
+          "output": [
+            "Node node-4-2 executed successfully"
+          ]
+        },
+        "node-4-3": {
+          "status": "completed",
+          "duration": 2632,
+          "output": [
+            "Node node-4-3 executed successfully"
+          ]
+        },
+        "node-4-4": {
+          "status": "completed",
+          "duration": 1073,
+          "output": [
+            "Node node-4-4 executed successfully"
+          ]
+        }
+      },
+      "completionRate": 0.88,
+      "memoryUsage": {
+        "start": 5.00775146484375,
+        "peak": 6.092623901367188,
+        "end": 5.077186584472656
+      },
+      "errors": [
+        {
+          "nodeId": "node-1-1",
+          "error": "Simulated error in node node-1-1",
+          "timestamp": 1756293126147
+        },
+        {
+          "nodeId": "node-2-3",
+          "error": "Simulated error in node node-2-3",
+          "timestamp": 1756293141676
+        },
+        {
+          "nodeId": "node-4-0",
+          "error": "Simulated error in node node-4-0",
+          "timestamp": 1756293154542
+        }
+      ],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.7110260499440474
+    },
+    {
+      "testName": "Preview Test",
+      "startTime": 1756293162295,
+      "endTime": 1756293170719,
+      "duration": 8424,
+      "nodes": {
+        "terminal-output": {
+          "status": "completed",
+          "duration": 1915,
+          "output": [
+            "Node terminal-output executed successfully"
+          ]
+        },
+        "web-preview": {
+          "status": "completed",
+          "duration": 2927,
+          "output": [
+            "Node web-preview executed successfully"
+          ]
+        },
+        "file-generator": {
+          "status": "completed",
+          "duration": 1744,
+          "output": [
+            "Node file-generator executed successfully"
+          ]
+        },
+        "monitor": {
+          "status": "completed",
+          "duration": 1838,
+          "output": [
+            "Node monitor executed successfully"
+          ]
+        }
+      },
+      "completionRate": 1,
+      "memoryUsage": {
+        "start": 5.084663391113281,
+        "peak": 6.115631103515625,
+        "end": 5.0963592529296875
+      },
+      "errors": [],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.8100979780600708
+    },
+    {
+      "testName": "Concurrent 1",
+      "startTime": 1756293170719,
+      "endTime": 1756293173364,
+      "duration": 2645,
+      "nodes": {
+        "flow1-node1": {
+          "status": "failed",
+          "duration": 1416,
+          "error": "Simulated error in node flow1-node1",
+          "retries": 1
+        },
+        "flow1-node2": {
+          "status": "completed",
+          "duration": 1229,
+          "output": [
+            "Node flow1-node2 executed successfully"
+          ]
+        }
+      },
+      "completionRate": 0.5,
+      "memoryUsage": {
+        "start": 5.106422424316406,
+        "peak": 6.146218872070312,
+        "end": 5.121849060058594
+      },
+      "errors": [
+        {
+          "nodeId": "flow1-node1",
+          "error": "Simulated error in node flow1-node1",
+          "timestamp": 1756293172135
+        }
+      ],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.7578539492369435
+    },
+    {
+      "testName": "Concurrent 0",
+      "startTime": 1756293170719,
+      "endTime": 1756293174367,
+      "duration": 3648,
+      "nodes": {
+        "flow0-node1": {
+          "status": "completed",
+          "duration": 2343,
+          "output": [
+            "Node flow0-node1 executed successfully"
+          ]
+        },
+        "flow0-node2": {
+          "status": "completed",
+          "duration": 1305,
+          "output": [
+            "Node flow0-node2 executed successfully"
+          ]
+        }
+      },
+      "completionRate": 1,
+      "memoryUsage": {
+        "start": 5.103614807128906,
+        "peak": 6.148324584960937,
+        "end": 5.123603820800781
+      },
+      "errors": [],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.9819081472049699
+    },
+    {
+      "testName": "Concurrent 2",
+      "startTime": 1756293170719,
+      "endTime": 1756293175153,
+      "duration": 4434,
+      "nodes": {
+        "flow2-node1": {
+          "status": "completed",
+          "duration": 1726,
+          "output": [
+            "Node flow2-node1 executed successfully"
+          ]
+        },
+        "flow2-node2": {
+          "status": "completed",
+          "duration": 2708,
+          "output": [
+            "Node flow2-node2 executed successfully"
+          ]
+        }
+      },
+      "completionRate": 1,
+      "memoryUsage": {
+        "start": 5.109046936035156,
+        "peak": 6.150430297851562,
+        "end": 5.125358581542969
+      },
+      "errors": [],
+      "parallelEfficiency": 0.3333333333333333,
+      "dependencyAccuracy": 0.8482225940505732
+    }
+  ],
+  "summary": {
+    "totalTests": 8,
+    "successfulTests": 6,
+    "partialTests": 2,
+    "failedTests": 0,
+    "avgExecutionTime": 14595.375,
+    "avgCompletionRate": 0.9225,
+    "avgParallelEfficiency": 0.3333319306041835,
+    "avgDependencyAccuracy": 0.8383512335136933,
+    "memoryUsage": {
+      "avgPeak": 6.406464385986328,
+      "totalErrors": 4
+    }
+  },
+  "performanceMetrics": {
+    "fastestExecution": 2645,
+    "slowestExecution": 52388,
+    "medianExecution": 52388
+  },
+  "testDetails": {
+    "simpleFlow": {
+      "nodes": 3,
+      "completionRate": 1,
+      "duration": 5609
+    },
+    "complexFlow": {
+      "nodes": 13,
+      "completionRate": 1,
+      "duration": 29704,
+      "parallelEfficiency": 0.3333221115001347
+    },
+    "errorHandling": {
+      "nodes": 5,
+      "completionRate": 1,
+      "errors": 0,
+      "failedNodes": 0,
+      "retriedNodes": 0
+    },
+    "performanceTest": {
+      "nodes": 25,
+      "completionRate": 0.88,
+      "duration": 52388,
+      "memoryIncrease": 0.0703887939453125,
+      "parallelEfficiency": 0.3333333333333333
+    },
+    "previewTest": {
+      "nodes": 4,
+      "completionRate": 1,
+      "nodesWithOutput": 4
+    },
+    "concurrentExecutions": {
+      "flows": 3,
+      "totalDuration": 4434,
+      "concurrencyFactor": 2.4192602616147947,
+      "avgCompletionRate": 0.8333333333333334
+    }
+  }
+}

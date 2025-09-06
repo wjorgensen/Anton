@@ -1,0 +1,153 @@
+{
+  "id": "rust-developer",
+  "name": "Rust Developer Agent",
+  "category": "execution",
+  "type": "rust-developer",
+  "version": "1.0.0",
+  "description": "Specialized agent for developing Rust systems programming, web services, and applications with memory safety, performance, and best practices",
+  "icon": "rust",
+  "color": "#CE422B",
+  "instructions": {
+    "base": "You are an expert Rust developer. Your role is to implement Rust applications, web services, and systems programming with memory safety, zero-cost abstractions, and performance. You write idiomatic Rust code following ownership principles.",
+    "contextual": "Implement the following Rust feature: {{featureDescription}}. Requirements: {{requirements}}. Framework: {{framework}}. Use Rust idioms and ensure memory safety."
+  },
+  "claudeMD": "# Rust Developer Agent\n\nExpert in Rust development with:\n- Axum, Actix-web, Warp frameworks\n- Tokio async runtime\n- Serde serialization\n- Diesel ORM and sqlx\n- Error handling patterns\n- Cargo package management\n- Testing with built-in framework\n- WebAssembly compilation\n\n## Core Competencies\n- Ownership and borrowing\n- Pattern matching and enums\n- Trait system and generics\n- Async/await programming\n- Memory-safe systems programming\n- HTTP server development\n- Database integration\n- Cross-compilation targets\n\n## Development Standards\n- Follow Rust naming conventions\n- Use Result<T, E> for error handling\n- Implement proper lifetime annotations\n- Write comprehensive unit tests\n- Use clippy for linting\n- Document public APIs with rustdoc",
+  "inputs": [
+    {
+      "name": "featureDescription",
+      "type": "string",
+      "required": true,
+      "description": "Description of the Rust feature to implement"
+    },
+    {
+      "name": "requirements",
+      "type": "array",
+      "required": true,
+      "description": "List of specific requirements for the feature"
+    },
+    {
+      "name": "framework",
+      "type": "string",
+      "required": false,
+      "description": "Rust framework (axum, actix-web, warp, rocket)",
+      "default": "axum"
+    },
+    {
+      "name": "database",
+      "type": "string",
+      "required": false,
+      "description": "Database integration (diesel, sqlx, mongodb)",
+      "default": "sqlx"
+    },
+    {
+      "name": "targetFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific files to modify or create"
+    },
+    {
+      "name": "dependencies",
+      "type": "object",
+      "required": false,
+      "description": "Cargo crates and versions needed"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "implementedFiles",
+      "type": "array",
+      "description": "List of files created or modified"
+    },
+    {
+      "name": "handlers",
+      "type": "array",
+      "description": "HTTP handlers implemented"
+    },
+    {
+      "name": "models",
+      "type": "array",
+      "description": "Data structures and models created"
+    },
+    {
+      "name": "services",
+      "type": "array",
+      "description": "Service modules implemented"
+    },
+    {
+      "name": "tests",
+      "type": "array",
+      "description": "Test files created"
+    },
+    {
+      "name": "documentation",
+      "type": "string",
+      "description": "Documentation of implemented features"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type execution"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category execution"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/sync-preview.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-execution.sh --node-id $NODE_ID --command $COMMAND"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/save-work.sh --node-id $NODE_ID --context-reset true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/handle-notification.sh --node-id $NODE_ID --type execution"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 45,
+    "estimatedTokens": 140000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "4GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": ["rust-setup", "cargo-setup"],
+  "tags": ["rust", "systems", "performance", "memory-safety", "web", "async", "tokio", "development"]
+}

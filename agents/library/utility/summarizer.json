@@ -1,0 +1,127 @@
+{
+  "id": "summarizer",
+  "name": "Project Summarization Agent",
+  "category": "utility",
+  "type": "summarizer",
+  "version": "1.0.0",
+  "description": "Specialized agent for project summarization, status reporting, and generating comprehensive project overviews and insights",
+  "icon": "document-text",
+  "color": "#8B5CF6",
+  "instructions": {
+    "base": "You are a project summarization expert. Your role is to analyze project structures, generate comprehensive summaries, create status reports, and provide insights into project health, progress, and key metrics.",
+    "contextual": "Summarize project: {{projectScope}}. Focus on: {{focusAreas}}. Report type: {{reportType}}. Audience: {{targetAudience}}. Include metrics: {{includeMetrics}}."
+  },
+  "claudeMD": "# Project Summarization Agent\n\nExpert in project analysis and reporting:\n- Project structure analysis\n- Progress tracking and reporting\n- Code metrics and statistics\n- Architecture overviews\n- Development activity summaries\n- Health assessments\n- Trend analysis\n- Executive reporting\n\n## Core Competencies\n- Codebase analysis and metrics\n- Technology stack identification\n- Project timeline assessment\n- Resource utilization reporting\n- Quality metrics compilation\n- Progress visualization\n- Risk identification\n- Stakeholder communication\n\n## Reporting Standards\n- Generate clear, actionable insights\n- Use appropriate visualizations\n- Tailor content to audience\n- Include relevant metrics\n- Provide recommendations\n- Maintain professional formatting",
+  "inputs": [
+    {
+      "name": "projectScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of project to summarize (entire project, specific modules, timeframe)",
+      "default": "entire-project"
+    },
+    {
+      "name": "focusAreas",
+      "type": "array",
+      "required": false,
+      "description": "Areas to focus on in summary",
+      "default": ["structure", "progress", "quality", "risks"]
+    },
+    {
+      "name": "reportType",
+      "type": "string",
+      "required": false,
+      "description": "Type of report to generate (executive, technical, status, health-check)",
+      "default": "technical"
+    },
+    {
+      "name": "targetAudience",
+      "type": "string",
+      "required": false,
+      "description": "Target audience (developers, managers, stakeholders, clients)",
+      "default": "developers"
+    },
+    {
+      "name": "includeMetrics",
+      "type": "boolean",
+      "required": false,
+      "description": "Include detailed metrics and statistics",
+      "default": true
+    },
+    {
+      "name": "timeRange",
+      "type": "object",
+      "required": false,
+      "description": "Time range for analysis (start and end dates)"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "summary",
+      "type": "object",
+      "description": "Comprehensive project summary with key findings"
+    },
+    {
+      "name": "metrics",
+      "type": "object",
+      "description": "Project metrics and statistics"
+    },
+    {
+      "name": "recommendations",
+      "type": "array",
+      "description": "Actionable recommendations for improvement"
+    },
+    {
+      "name": "riskAssessment",
+      "type": "object",
+      "description": "Identified risks and mitigation suggestions"
+    },
+    {
+      "name": "reportFiles",
+      "type": "array",
+      "description": "Generated report files and documentation"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type utility"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-changes.sh --node-id $NODE_ID --tool $TOOL_NAME --category utility"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-analysis.sh --node-id $NODE_ID --operation analysis"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 15,
+    "estimatedTokens": 75000,
+    "requiresGPU": false,
+    "maxRetries": 2,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["summarization", "reporting", "analysis", "metrics", "documentation", "utility", "insights", "project-management"]
+}

@@ -1,0 +1,272 @@
+{
+  "testExecutionSummary": {
+    "timestamp": "2025-08-27T10:45:00Z",
+    "environment": "development",
+    "framework": "Jest with React Testing Library",
+    "testRunner": "anton-visual-editor test suite"
+  },
+  
+  "overallResults": {
+    "totalTests": 191,
+    "passedTests": 51,
+    "failedTests": 140,
+    "passRate": "26.7%",
+    "testSuites": {
+      "total": 7,
+      "passed": 0,
+      "failed": 7
+    },
+    "executionTime": "6.709s",
+    "snapshots": {
+      "written": 6,
+      "total": 6,
+      "status": "SUCCESS"
+    }
+  },
+  
+  "coverageReport": {
+    "statements": {
+      "percentage": "4.78%",
+      "threshold": "5%",
+      "status": "BELOW_THRESHOLD"
+    },
+    "branches": {
+      "percentage": "4.68%",
+      "threshold": "5%",
+      "status": "BELOW_THRESHOLD"
+    },
+    "lines": {
+      "percentage": "4.95%",
+      "threshold": "5%",
+      "status": "BELOW_THRESHOLD"
+    },
+    "functions": {
+      "percentage": "2.54%",
+      "threshold": "5%",
+      "status": "BELOW_THRESHOLD"
+    },
+    "overall": "NEEDS_IMPROVEMENT"
+  },
+  
+  "componentTestResults": {
+    "FlowEditor": {
+      "totalTests": 29,
+      "passed": 0,
+      "failed": 29,
+      "categories": {
+        "rendering": {
+          "tests": ["main components", "background", "controls", "minimap", "panels"],
+          "status": "FAILED",
+          "issues": ["Mock incompatibility with React Flow event handlers"]
+        },
+        "dragAndDrop": {
+          "tests": ["drag initiation", "drop handling", "agent data transfer"],
+          "status": "FAILED",
+          "issues": ["Event handler property warnings"]
+        },
+        "nodeInteraction": {
+          "tests": ["selection", "double-click editing", "deletion"],
+          "status": "FAILED"
+        },
+        "flowExecution": {
+          "tests": ["run/stop controls", "status display"],
+          "status": "FAILED"
+        },
+        "importExport": {
+          "tests": ["JSON export", "JSON import", "error handling"],
+          "status": "FAILED"
+        }
+      }
+    },
+    
+    "AgentLibrary": {
+      "totalTests": 35,
+      "passed": 12,
+      "failed": 23,
+      "categories": {
+        "rendering": {
+          "tests": ["header", "search", "categories", "agent items"],
+          "status": "PARTIAL",
+          "passedTests": ["basic rendering", "category display"]
+        },
+        "search": {
+          "tests": ["filtering", "case insensitive", "clear"],
+          "status": "FAILED"
+        },
+        "dragFunctionality": {
+          "tests": ["draggable items", "drag events", "data transfer", "keyboard nav"],
+          "status": "ADDED",
+          "newTests": 6
+        },
+        "categoryManagement": {
+          "tests": ["expand/collapse", "colors", "counts"],
+          "status": "PARTIAL"
+        }
+      }
+    },
+    
+    "NodeComponents": {
+      "BaseNode": {
+        "totalTests": 16,
+        "passed": 5,
+        "failed": 11,
+        "issues": ["Category text case mismatch (SETUP vs setup)", "Color format differences"]
+      },
+      "ReviewNode": {
+        "totalTests": 24,
+        "passed": 8,
+        "failed": 16,
+        "issues": ["Status display rendering", "Handle positioning"]
+      }
+    },
+    
+    "NodeEditModal": {
+      "totalTests": 17,
+      "passed": 6,
+      "failed": 11,
+      "categories": {
+        "rendering": {
+          "status": "PASSED",
+          "tests": ["modal display", "form fields", "agent info"]
+        },
+        "formValidation": {
+          "status": "ADDED",
+          "tests": ["required fields", "number validation", "timeout range", "retry count"],
+          "newTests": 4
+        },
+        "formInteractions": {
+          "status": "FAILED",
+          "tests": ["label update", "input values", "cancel", "escape key"]
+        },
+        "advancedFeatures": {
+          "status": "FAILED",
+          "tests": ["env variables", "working directory"],
+          "issues": ["Modal not rendering in test environment"]
+        }
+      }
+    },
+    
+    "PreviewManager": {
+      "totalTests": 31,
+      "passed": 0,
+      "failed": 31,
+      "categories": {
+        "terminal": {
+          "status": "ADDED",
+          "tests": ["output display", "ANSI colors", "auto-scroll", "clear", "copy"],
+          "newTests": 5
+        },
+        "webPreview": {
+          "status": "ADDED",
+          "tests": ["iframe rendering", "URL editing", "refresh", "new tab"],
+          "newTests": 5
+        },
+        "tabManagement": {
+          "status": "ADDED",
+          "tests": ["tab switching", "active state", "keyboard nav"],
+          "newTests": 3
+        },
+        "resizeFeatures": {
+          "status": "ADDED",
+          "tests": ["resize handle", "min/max constraints"],
+          "newTests": 2
+        }
+      }
+    },
+    
+    "Snapshots": {
+      "totalTests": 19,
+      "passed": 6,
+      "failed": 13,
+      "categories": {
+        "componentSnapshots": {
+          "status": "PARTIAL",
+          "created": ["FlowEditor", "AgentLibrary", "BaseNode", "ReviewNode", "NodeEditModal", "PreviewManager"]
+        },
+        "themeSnapshots": {
+          "status": "ADDED",
+          "created": ["dark theme variants for all components"]
+        }
+      }
+    }
+  },
+  
+  "newTestsAdded": {
+    "total": 70,
+    "categories": {
+      "dragAndDrop": 12,
+      "formValidation": 8,
+      "previewPanels": 20,
+      "snapshots": 19,
+      "interactions": 11
+    }
+  },
+  
+  "testIssues": {
+    "critical": [
+      {
+        "component": "NodeEditModal",
+        "issue": "Modal not rendering in test environment",
+        "impact": "11 tests failing",
+        "recommendation": "Check modal portal mounting and mock setup"
+      },
+      {
+        "component": "FlowEditor",
+        "issue": "React Flow event handler warnings",
+        "impact": "All interaction tests failing",
+        "recommendation": "Update xyflowReact mock to properly handle event props"
+      }
+    ],
+    "warnings": [
+      {
+        "component": "Coverage",
+        "issue": "Below threshold in all metrics",
+        "current": "2.54% - 4.95%",
+        "required": "5%",
+        "recommendation": "Focus on testing critical business logic and user interactions"
+      }
+    ],
+    "improvements": [
+      {
+        "area": "Mock Setup",
+        "description": "Enhanced mocking for @/lib/agents, hooks, and complex components"
+      },
+      {
+        "area": "Test Coverage",
+        "description": "Added comprehensive tests for drag functionality, form validation, and preview features"
+      },
+      {
+        "area": "Snapshot Testing",
+        "description": "Created baseline snapshots for visual regression testing"
+      }
+    ]
+  },
+  
+  "screenshots": [],
+  
+  "recommendations": {
+    "immediate": [
+      "Fix NodeEditModal rendering issues in test environment",
+      "Update React Flow mocks to eliminate event handler warnings",
+      "Resolve text case mismatches in BaseNode tests"
+    ],
+    "shortTerm": [
+      "Increase test coverage to meet minimum thresholds",
+      "Add integration tests for flow execution",
+      "Implement E2E tests for critical user journeys"
+    ],
+    "longTerm": [
+      "Set up visual regression testing with Percy or Chromatic",
+      "Implement performance benchmarking tests",
+      "Add accessibility testing with jest-axe"
+    ]
+  },
+  
+  "testCommands": {
+    "runAll": "cd anton-visual-editor && npm test",
+    "withCoverage": "cd anton-visual-editor && npm test -- --coverage",
+    "watchMode": "cd anton-visual-editor && npm test -- --watch",
+    "updateSnapshots": "cd anton-visual-editor && npm test -- -u",
+    "specificComponent": "cd anton-visual-editor && npm test -- FlowEditor"
+  }
+}

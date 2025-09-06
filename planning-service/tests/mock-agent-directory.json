@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0",
+  "categories": {
+    "setup": {
+      "name": "Setup",
+      "description": "Project initialization and setup agents",
+      "agents": ["vite-react-setup", "express-setup", "postgres-setup", "nextjs-setup", "flutter-setup", "angular-setup", "django-setup", "fastapi-setup"]
+    },
+    "execution": {
+      "name": "Execution",
+      "description": "Implementation and development agents",
+      "agents": ["react-developer", "api-developer", "database-developer", "nodejs-backend", "python-developer", "angular-developer", "go-developer", "websocket-developer"]
+    },
+    "testing": {
+      "name": "Testing",
+      "description": "Testing and quality assurance agents",
+      "agents": ["jest-tester", "playwright-e2e", "pytest-runner", "cypress-tester", "go-test-runner", "k6-performance"]
+    },
+    "integration": {
+      "name": "Integration",
+      "description": "Integration and deployment agents",
+      "agents": ["docker-builder", "ci-cd-runner", "api-integrator", "git-merger", "db-migrator"]
+    },
+    "review": {
+      "name": "Review",
+      "description": "Code review and validation agents",
+      "agents": ["code-review", "security-review", "manual-review"]
+    },
+    "utility": {
+      "name": "Utility",
+      "description": "Utility and helper agents",
+      "agents": ["documentation", "deployment", "summarizer"]
+    }
+  },
+  "agents": {
+    "vite-react-setup": {
+      "name": "React Vite Setup Agent",
+      "category": "setup",
+      "capabilities": ["react", "vite", "frontend", "setup"]
+    },
+    "express-setup": {
+      "name": "Express Setup Agent",
+      "category": "setup",
+      "capabilities": ["nodejs", "express", "backend", "setup"]
+    },
+    "nextjs-setup": {
+      "name": "Next.js Setup Agent",
+      "category": "setup",
+      "capabilities": ["nextjs", "react", "fullstack", "setup"]
+    },
+    "flutter-setup": {
+      "name": "Flutter Setup Agent",
+      "category": "setup",
+      "capabilities": ["flutter", "mobile", "dart", "setup"]
+    },
+    "angular-setup": {
+      "name": "Angular Setup Agent",
+      "category": "setup",
+      "capabilities": ["angular", "frontend", "typescript", "setup"]
+    },
+    "react-developer": {
+      "name": "React Developer Agent",
+      "category": "execution",
+      "capabilities": ["react", "frontend", "implementation"]
+    },
+    "nodejs-backend": {
+      "name": "Node.js Backend Agent",
+      "category": "execution",
+      "capabilities": ["nodejs", "backend", "api", "implementation"]
+    },
+    "api-developer": {
+      "name": "API Developer Agent",
+      "category": "execution",
+      "capabilities": ["api", "backend", "rest", "implementation"]
+    },
+    "database-developer": {
+      "name": "Database Developer Agent",
+      "category": "execution",
+      "capabilities": ["database", "sql", "implementation"]
+    },
+    "python-developer": {
+      "name": "Python Developer Agent",
+      "category": "execution",
+      "capabilities": ["python", "backend", "implementation"]
+    },
+    "go-developer": {
+      "name": "Go Developer Agent",
+      "category": "execution",
+      "capabilities": ["go", "golang", "backend", "implementation"]
+    },
+    "jest-tester": {
+      "name": "Jest Test Runner",
+      "category": "testing",
+      "capabilities": ["testing", "unit", "jest", "javascript"]
+    },
+    "playwright-e2e": {
+      "name": "Playwright E2E Tester",
+      "category": "testing",
+      "capabilities": ["testing", "e2e", "playwright", "browser"]
+    },
+    "pytest-runner": {
+      "name": "Pytest Test Runner",
+      "category": "testing",
+      "capabilities": ["testing", "unit", "pytest", "python"]
+    },
+    "go-test-runner": {
+      "name": "Go Test Runner",
+      "category": "testing",
+      "capabilities": ["testing", "unit", "go"]
+    },
+    "git-merger": {
+      "name": "Git Merger Agent",
+      "category": "integration",
+      "capabilities": ["git", "merge", "version-control"]
+    },
+    "api-integrator": {
+      "name": "API Integrator Agent",
+      "category": "integration",
+      "capabilities": ["api", "integration", "endpoints"]
+    },
+    "docker-builder": {
+      "name": "Docker Builder Agent",
+      "category": "integration",
+      "capabilities": ["docker", "containerization", "deployment"]
+    },
+    "db-migrator": {
+      "name": "Database Migrator Agent",
+      "category": "integration",
+      "capabilities": ["database", "migration", "schema"]
+    },
+    "security-review": {
+      "name": "Security Review Agent",
+      "category": "review",
+      "capabilities": ["security", "review", "audit"]
+    },
+    "summarizer": {
+      "name": "Summarizer Agent",
+      "category": "utility",
+      "capabilities": ["summary", "documentation", "report"]
+    },
+    "deployment": {
+      "name": "Deployment Agent",
+      "category": "utility",
+      "capabilities": ["deployment", "production", "release"]
+    }
+  }
+}

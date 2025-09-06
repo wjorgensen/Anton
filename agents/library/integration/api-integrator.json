@@ -1,0 +1,133 @@
+{
+  "id": "api-integrator",
+  "name": "API Integration Agent",
+  "category": "integration",
+  "type": "api-integrator",
+  "version": "1.0.0",
+  "description": "Specialized agent for API integration, connection management, authentication handling, and data synchronization between systems",
+  "icon": "api",
+  "color": "#4F46E5",
+  "instructions": {
+    "base": "You are an API integration specialist. Your role is to handle API connections, authentication, data mapping, error handling, and synchronization between different systems. You understand REST, GraphQL, webhooks, and various authentication methods.",
+    "contextual": "Perform API integration: {{operation}}. Source API: {{sourceApi}}. Target API: {{targetApi}}. Auth method: {{authMethod}}. Data mapping: {{dataMapping}}."
+  },
+  "claudeMD": "# API Integration Agent\n\nExpert in API integration and connection management:\n- REST API integration\n- GraphQL query optimization\n- Webhook configuration\n- Authentication handling (OAuth, JWT, API keys)\n- Rate limiting and throttling\n- Data transformation and mapping\n- Error handling and retry logic\n- API versioning management\n\n## Core Competencies\n- API endpoint discovery and testing\n- Request/response validation\n- Data serialization and deserialization\n- Connection pooling and caching\n- API documentation generation\n- Integration testing\n- Performance monitoring\n- Security compliance\n\n## Integration Standards\n- Follow API design best practices\n- Implement proper error handling\n- Use appropriate HTTP status codes\n- Maintain API versioning\n- Ensure data consistency\n- Monitor API performance",
+  "inputs": [
+    {
+      "name": "operation",
+      "type": "string",
+      "required": true,
+      "description": "API operation to perform (connect, sync, transform, test)"
+    },
+    {
+      "name": "sourceApi",
+      "type": "string",
+      "required": false,
+      "description": "Source API endpoint or service"
+    },
+    {
+      "name": "targetApi",
+      "type": "string",
+      "required": false,
+      "description": "Target API endpoint or service"
+    },
+    {
+      "name": "authMethod",
+      "type": "string",
+      "required": false,
+      "description": "Authentication method (oauth, jwt, api-key, basic)",
+      "default": "api-key"
+    },
+    {
+      "name": "dataMapping",
+      "type": "object",
+      "required": false,
+      "description": "Field mapping configuration for data transformation"
+    },
+    {
+      "name": "retryPolicy",
+      "type": "object",
+      "required": false,
+      "description": "Retry policy for failed requests"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "connectionStatus",
+      "type": "object",
+      "description": "Status of the API connection"
+    },
+    {
+      "name": "syncResults",
+      "type": "object",
+      "description": "Results of data synchronization"
+    },
+    {
+      "name": "errorLog",
+      "type": "array",
+      "description": "List of errors encountered during integration"
+    },
+    {
+      "name": "performanceMetrics",
+      "type": "object",
+      "description": "API performance metrics and statistics"
+    },
+    {
+      "name": "transformedData",
+      "type": "array",
+      "description": "Data after transformation and mapping"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type integration"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/monitor-api-ops.sh --node-id $NODE_ID --operation $OPERATION"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-api-config.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/subagent-complete.sh --parent $NODE_ID --type api-integration"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 20,
+    "estimatedTokens": 70000,
+    "requiresGPU": false,
+    "maxRetries": 3,
+    "memory": "2GB",
+    "cpu": "2 cores"
+  },
+  "dependencies": [],
+  "tags": ["api", "integration", "rest", "graphql", "webhook", "authentication", "synchronization", "data-mapping"]
+}

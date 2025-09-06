@@ -1,0 +1,156 @@
+{
+  "testSuite": "Anton E2E Tests - New Drag-Drop UI",
+  "timestamp": "2025-08-27T10:33:31.641Z",
+  "environment": {
+    "platform": "macOS",
+    "browser": "Chromium",
+    "resolution": "1920x1080",
+    "frontendUrl": "http://localhost:3000",
+    "orchestratorUrl": "http://localhost:5000"
+  },
+  "summary": {
+    "totalTests": 9,
+    "passed": 8,
+    "failed": 1,
+    "skipped": 0,
+    "successRate": "88.9%",
+    "duration": "12.1s"
+  },
+  "testResults": {
+    "projectCreation": {
+      "status": "passed",
+      "duration": "3.8s",
+      "steps": [
+        "Dashboard navigation",
+        "New project modal interaction",
+        "Form validation",
+        "Project list verification"
+      ]
+    },
+    "editorNavigation": {
+      "status": "passed",
+      "duration": "8.1s",
+      "steps": [
+        "Multiple path testing (/editor, /flow, /canvas)",
+        "React Flow canvas detection",
+        "Project link navigation"
+      ]
+    },
+    "agentLibrary": {
+      "status": "failed",
+      "duration": "5.2s",
+      "error": "Agent library selector not found - needs update for new UI",
+      "steps": [
+        "Library visibility check",
+        "Agent counting",
+        "Category expansion"
+      ]
+    },
+    "searchFunctionality": {
+      "status": "passed",
+      "duration": "5.1s",
+      "steps": [
+        "Search input detection",
+        "Filter application",
+        "Clear functionality"
+      ]
+    },
+    "dragDrop": {
+      "status": "passed",
+      "duration": "3.3s",
+      "steps": [
+        "Draggable item detection",
+        "Drop zone identification",
+        "Node creation verification"
+      ]
+    },
+    "flowExecution": {
+      "status": "passed",
+      "duration": "2.9s",
+      "steps": [
+        "Run button detection",
+        "Execution trigger",
+        "Terminal output verification"
+      ]
+    },
+    "responsive": {
+      "status": "passed",
+      "duration": "4.6s",
+      "breakpoints": {
+        "desktop": "1920x1080",
+        "tablet": "768x1024",
+        "mobile": "375x667"
+      }
+    },
+    "performance": {
+      "status": "passed",
+      "duration": "3.3s",
+      "metrics": {
+        "dashboardLoadTime": "954ms",
+        "editorLoadTime": "826ms",
+        "averageLoadTime": "890ms",
+        "maxLoadTime": "954ms"
+      }
+    }
+  },
+  "screenshots": {
+    "generated": 10,
+    "files": [
+      "1-dashboard.png",
+      "2-editor-flow.png",
+      "2-editor-via-project.png",
+      "3-agent-library.png",
+      "4-search-results.png",
+      "5-after-drag-drop.png",
+      "6-execution.png",
+      "7-responsive-desktop.png",
+      "7-responsive-tablet.png",
+      "7-responsive-mobile.png"
+    ],
+    "failures": [
+      "failure-should-display-agent-library-sidebar.png",
+      "failure-should-drag-agent-from-library-to-canvas.png"
+    ]
+  },
+  "coverage": {
+    "userJourneys": {
+      "projectCreation": "100%",
+      "agentLibraryInteraction": "75%",
+      "dragDropFlow": "100%",
+      "nodeEditing": "50%",
+      "flowExecution": "100%",
+      "visualTests": "100%"
+    },
+    "components": {
+      "dashboard": "tested",
+      "editor": "tested",
+      "agentLibrary": "partial",
+      "flowCanvas": "tested",
+      "terminal": "tested",
+      "modals": "tested"
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "high",
+      "issue": "Agent Library selectors need updating",
+      "solution": "Add data-testid attributes to AgentLibrary component"
+    },
+    {
+      "priority": "medium",
+      "issue": "Node editing tests incomplete",
+      "solution": "Add comprehensive node property editing tests"
+    },
+    {
+      "priority": "low",
+      "issue": "Visual regression testing missing",
+      "solution": "Implement Percy or similar visual testing tool"
+    }
+  ],
+  "testCommands": {
+    "runAll": "npx playwright test tests/e2e/ui-e2e-test.spec.js",
+    "runHeaded": "npx playwright test tests/e2e/ui-e2e-test.spec.js --headed",
+    "runDebug": "npx playwright test tests/e2e/ui-e2e-test.spec.js --debug",
+    "viewReport": "npx playwright show-report"
+  }
+}

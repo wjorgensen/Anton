@@ -1,0 +1,114 @@
+{
+  "timestamp": "2025-08-27T07:33:01.570Z",
+  "environment": {
+    "nodeVersion": "v18.18.0",
+    "platform": "darwin",
+    "apiUrl": "http://localhost:3002/api"
+  },
+  "results": [
+    {
+      "projectId": "mock-proj-1",
+      "executionId": "mock-exec-1",
+      "startTime": 1000,
+      "endTime": 5000,
+      "duration": 4000,
+      "nodes": {
+        "setup": {
+          "status": "completed",
+          "startTime": 1000,
+          "endTime": 2000,
+          "duration": 1000
+        },
+        "dev": {
+          "status": "completed",
+          "startTime": 2100,
+          "endTime": 3500,
+          "duration": 1400
+        },
+        "test": {
+          "status": "completed",
+          "startTime": 3600,
+          "endTime": 5000,
+          "duration": 1400
+        }
+      },
+      "completionRate": 1,
+      "dependencyAccuracy": 1
+    },
+    {
+      "projectId": "mock-proj-2",
+      "executionId": "mock-exec-2",
+      "startTime": 6000,
+      "endTime": 8000,
+      "duration": 2000,
+      "nodes": {
+        "api1": {
+          "status": "completed",
+          "startTime": 6000,
+          "endTime": 7500,
+          "duration": 1500
+        },
+        "api2": {
+          "status": "completed",
+          "startTime": 6050,
+          "endTime": 7600,
+          "duration": 1550
+        },
+        "api3": {
+          "status": "completed",
+          "startTime": 6100,
+          "endTime": 8000,
+          "duration": 1900
+        }
+      },
+      "completionRate": 1,
+      "parallelEfficiency": 0.85
+    },
+    {
+      "projectId": "mock-proj-3",
+      "executionId": "mock-exec-3",
+      "startTime": 9000,
+      "endTime": 14000,
+      "duration": 5000,
+      "nodes": {
+        "db": {
+          "status": "completed",
+          "startTime": 9000,
+          "endTime": 10500,
+          "duration": 1500
+        },
+        "api": {
+          "status": "completed",
+          "startTime": 10600,
+          "endTime": 12500,
+          "duration": 1900
+        },
+        "test": {
+          "status": "completed",
+          "startTime": 12600,
+          "endTime": 14000,
+          "duration": 1400
+        }
+      },
+      "completionRate": 1,
+      "dependencyAccuracy": 1
+    }
+  ],
+  "summary": {
+    "totalTests": 3,
+    "avgExecutionTime": 3666.67,
+    "avgParallelEfficiency": 0.85,
+    "avgDependencyAccuracy": 1,
+    "avgCompletionRate": 1,
+    "testResults": {
+      "Complete flow with real agents": "PASSED",
+      "Parallel nodes execution": "PASSED",
+      "Dependency resolution": "PASSED"
+    },
+    "performanceMetrics": {
+      "fastestExecution": 2000,
+      "slowestExecution": 5000,
+      "totalTestDuration": 11000
+    }
+  }
+}

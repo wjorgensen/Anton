@@ -1,0 +1,102 @@
+{
+  "timestamp": "2025-08-27T07:01:20.842Z",
+  "tests": [
+    {
+      "name": "Create project via API",
+      "status": "passed",
+      "duration": 23,
+      "error": null
+    },
+    {
+      "name": "Retrieve project from API",
+      "status": "passed",
+      "duration": 3,
+      "error": null
+    },
+    {
+      "name": "Update project via API",
+      "status": "passed",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "List projects with pagination",
+      "status": "passed",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "Create execution record",
+      "status": "passed",
+      "duration": 3,
+      "error": null
+    },
+    {
+      "name": "Handle authentication errors",
+      "status": "passed",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "Generate flow from requirements",
+      "status": "passed",
+      "duration": 1,
+      "error": null
+    },
+    {
+      "name": "Generate complex multi-service flow",
+      "status": "passed",
+      "duration": 1,
+      "error": null
+    },
+    {
+      "name": "Validate agent references in flow",
+      "status": "passed",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "Handle invalid requirements gracefully",
+      "status": "passed",
+      "duration": 1,
+      "error": null
+    },
+    {
+      "name": "WebSocket connects with authentication",
+      "status": "passed",
+      "duration": 8,
+      "error": null
+    },
+    {
+      "name": "WebSocket rejects invalid authentication",
+      "status": "passed",
+      "duration": 3,
+      "error": null
+    },
+    {
+      "name": "WebSocket broadcasts flow events",
+      "status": "passed",
+      "duration": 5,
+      "error": null
+    },
+    {
+      "name": "WebSocket handles node status updates",
+      "status": "passed",
+      "duration": 5,
+      "error": null
+    },
+    {
+      "name": "WebSocket streams terminal output",
+      "status": "passed",
+      "duration": 5,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "successRate": "100.00%",
+    "duration": 74
+  }
+}

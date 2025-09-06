@@ -1,0 +1,135 @@
+{
+  "id": "cypress-tester",
+  "name": "Cypress E2E Testing Agent",
+  "category": "testing",
+  "type": "cypress-tester",
+  "version": "1.0.0",
+  "description": "Specialized agent for running Cypress end-to-end tests, analyzing failures, generating test reports, and implementing test fixes with intelligent retry strategies",
+  "icon": "cypress",
+  "color": "#17202C",
+  "instructions": {
+    "base": "You are a Cypress end-to-end testing specialist. Your role is to run E2E tests, analyze failures, fix broken tests, write new tests, and ensure comprehensive test coverage. You understand Cypress commands, custom commands, fixtures, and intercepts.",
+    "contextual": "Run Cypress E2E tests for: {{testScope}}. Test files: {{testFiles}}. Browser: {{browser}}. Fix any failures and ensure all tests pass."
+  },
+  "claudeMD": "# Cypress E2E Testing Agent\n\nExpert in Cypress end-to-end testing:\n- Cypress 13+ configuration and setup\n- Browser-based testing with real user interactions\n- Custom command development\n- Fixture management and data-driven testing\n- Network stubbing and mocking\n- Visual testing integration\n- Test debugging and fixing\n- CI/CD pipeline integration\n\n## Core Competencies\n- Cypress command chaining\n- Element selection strategies\n- Async handling and retries\n- Screenshot and video capture\n- Test failure diagnosis\n- Network request interception\n- Custom plugin development\n- Page object patterns\n\n## Testing Standards\n- Achieve stable test execution\n- Fix all flaky tests\n- Write maintainable test code\n- Use proper wait strategies\n- Mock external dependencies\n- Implement retry mechanisms",
+  "inputs": [
+    {
+      "name": "testScope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of tests to run (all, smoke, regression, specific)",
+      "default": "all"
+    },
+    {
+      "name": "testFiles",
+      "type": "array",
+      "required": false,
+      "description": "Specific test files to run"
+    },
+    {
+      "name": "browser",
+      "type": "string",
+      "required": false,
+      "description": "Browser to test against",
+      "default": "chrome"
+    },
+    {
+      "name": "headed",
+      "type": "boolean",
+      "required": false,
+      "description": "Run tests in headed mode",
+      "default": false
+    },
+    {
+      "name": "record",
+      "type": "boolean",
+      "required": false,
+      "description": "Record test run to Cypress Dashboard",
+      "default": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "testResults",
+      "type": "object",
+      "description": "Test execution results with pass/fail counts"
+    },
+    {
+      "name": "screenshots",
+      "type": "array",
+      "description": "Screenshots captured during test execution"
+    },
+    {
+      "name": "videos",
+      "type": "array",
+      "description": "Videos recorded during test execution"
+    },
+    {
+      "name": "failures",
+      "type": "array",
+      "description": "Details of failed tests with error messages"
+    },
+    {
+      "name": "fixedTests",
+      "type": "array",
+      "description": "Tests that were fixed during execution"
+    },
+    {
+      "name": "newTests",
+      "type": "array",
+      "description": "New test files created"
+    }
+  ],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/stop.sh --node-id $NODE_ID --status $STATUS --output-type testing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/parse-test-output.sh --node-id $NODE_ID --framework cypress"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/track-test-fixes.sh --node-id $NODE_ID --file $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/hooks/capture-test-adjustments.sh --node-id $NODE_ID"
+          }
+        ]
+      }
+    ]
+  },
+  "resources": {
+    "estimatedTime": 25,
+    "estimatedTokens": 90000,
+    "requiresGPU": false,
+    "maxRetries": 5,
+    "memory": "6GB",
+    "cpu": "3 cores"
+  },
+  "dependencies": ["nodejs-backend", "react-developer"],
+  "tags": ["cypress", "testing", "e2e", "browser-testing", "end-to-end", "javascript", "typescript", "automation"]
+}
