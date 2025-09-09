@@ -1,5 +1,7 @@
 # Plan Review Task
 
+[AGENT_LIST_PLACEHOLDER]
+
 ## Original Project Requirements
 
 [PROJECT_PROMPT_PLACEHOLDER]

@@ -6,6 +6,8 @@ import fs from 'fs/promises';
 import { promisify } from 'util';
 import { logger } from '../utils/logger';
 import { ClaudeMessage, PlanGenerationResult, PlanRequest } from '../types';
+// @ts-ignore
+import { getAgentList } from '../../agents/scan-agents.js';
 
 const execAsync = promisify(exec);
 
@@ -109,7 +111,7 @@ export class PlanningService extends EventEmitter {
       }
 
       // Prepare instructions with the prompt
-      const instructions = this.prepareInstructions(request.prompt);
+      const instructions = await this.prepareInstructions(request.prompt);
       
       // Write instructions to file
       const instructionsPath = path.join(testRunDir, 'instructions.md');
@@ -211,7 +213,7 @@ export class PlanningService extends EventEmitter {
         args.push('--append-system-prompt', systemPromptPath);
       }
       
-      args.push('--cwd', testRunDir);
+      // cwd is set in spawn options, not as an argument
 
       logger.info('Spawning Claude planning process', { sessionId, args });
       
@@ -289,7 +291,7 @@ export class PlanningService extends EventEmitter {
       await fs.copyFile(planFixerSource, planFixerDest);
     }
     
-    const fixerInstructions = this.prepareFixerInstructions(originalPrompt);
+    const fixerInstructions = await this.prepareFixerInstructions(originalPrompt);
     const hasFixerPrompt = await this.fileExists(planFixerDest);
     
     return new Promise((resolve, reject) => {
@@ -304,7 +306,7 @@ export class PlanningService extends EventEmitter {
         args.push('--append-system-prompt', planFixerDest);
       }
       
-      args.push('--cwd', testRunDir);
+      // cwd is set in spawn options, not as an argument
 
       logger.info('Spawning Claude plan fixer process', { sessionId });
       
@@ -366,42 +368,36 @@ export class PlanningService extends EventEmitter {
     });
   }
 
-  private prepareInstructions(prompt: string): string {
-    return `# Project Requirements
-
-${prompt}
-
-## Your Task
-
-Generate a comprehensive Anton execution plan for the above requirements. The plan should:
-1. Break down the project into logical, parallelizable tasks
-2. Include proper testing and fix loops for quality assurance
-3. Maximize parallelization where possible
-4. Include all necessary setup, development, integration, and deployment phases
-
-Create the plan in the required JSON format and save it to \`.anton/plan/plan.json\`.`;
+  private async prepareInstructions(prompt: string): Promise<string> {
+    // Get the dynamic agent list
+    const agentList = await getAgentList();
+    
+    // Read the instructions template
+    const instructionsPath = path.join(process.cwd(), 'anton-agents', 'prompts', 'planner-instructions.md');
+    const instructionsTemplate = await fs.readFile(instructionsPath, 'utf-8');
+    
+    // Replace placeholders
+    const instructions = instructionsTemplate
+      .replace('[AGENT_LIST_PLACEHOLDER]', agentList)
+      .replace('[PROJECT_PROMPT_PLACEHOLDER]', prompt);
+    
+    return instructions;
   }
 
-  private prepareFixerInstructions(originalPrompt: string): string {
-    return `# Plan Review Task
-
-## Original Project Requirements
-
-${originalPrompt}
-
-## Your Task
-
-Review and fix the plan that was just generated at \`.anton/plan/plan.json\`.
-
-1. **Load the existing plan**
-2. **Check for structural issues** (see your system prompt for detailed checks)
-3. **Verify requirements coverage** against the original prompt above
-4. **Fix any issues found**
-5. **Save the corrected plan** back to \`.anton/plan/plan.json\`
-
-Focus on fixing errors and adding missing critical components. Do not completely redesign the plan.
-
-After fixing, confirm with: "Updated plan saved to .anton/plan/plan.json"`;
+  private async prepareFixerInstructions(originalPrompt: string): Promise<string> {
+    // Get the dynamic agent list
+    const agentList = await getAgentList();
+    
+    // Read the fixer instructions template
+    const fixerInstructionsPath = path.join(process.cwd(), 'anton-agents', 'prompts', 'plan-fixer-instructions.md');
+    const fixerTemplate = await fs.readFile(fixerInstructionsPath, 'utf-8');
+    
+    // Replace placeholders
+    const instructions = fixerTemplate
+      .replace('[AGENT_LIST_PLACEHOLDER]', agentList)
+      .replace('[PROJECT_PROMPT_PLACEHOLDER]', originalPrompt);
+    
+    return instructions;
   }
 
   private async dirExists(dir: string): Promise<boolean> {
@@ -482,17 +478,16 @@ Respond with JSON only in this format:
       return new Promise((resolve, reject) => {
         const args = [
           '-p', instructions,
-          '--output-format', 'stream-json',
           '--permission-mode', 'acceptEdits',
-          '--append-system-prompt', systemPromptDest,
-          '--cwd', blankDir
+          '--append-system-prompt', systemPromptDest
         ];
         
         logger.info('Running pre-planning validation', { sessionId });
         
         const claudeProcess = spawn('claude', args, {
           cwd: blankDir,
-          env: { ...process.env }
+          env: { ...process.env },
+          stdio: ['pipe', 'pipe', 'pipe']  // Explicitly set stdio
         });
         
         const prePlanSessionId = `${sessionId}-preplan`;
@@ -505,24 +500,10 @@ Respond with JSON only in this format:
           const chunk = data.toString();
           outputBuffer += chunk;
           
-          // Look for JSON response in the output
-          const lines = outputBuffer.split('\n');
-          for (const line of lines) {
-            if (line.trim()) {
-              try {
-                const message = JSON.parse(line);
-                // Look for assistant messages containing our JSON
-                if (message.type === 'message' && message.content) {
-                  // Extract JSON from the content
-                  const jsonMatch = message.content.match(/\{[^}]*"isProjectDescription"[^}]*\}/s);
-                  if (jsonMatch) {
-                    jsonResponse = jsonMatch[0];
-                  }
-                }
-              } catch (err) {
-                // Not JSON, continue
-              }
-            }
+          // Look for JSON response directly in the output (since we're not using stream-json)
+          const jsonMatch = outputBuffer.match(/\{[^}]*"isProjectDescription"[^}]*\}/s);
+          if (jsonMatch) {
+            jsonResponse = jsonMatch[0];
           }
         });
         

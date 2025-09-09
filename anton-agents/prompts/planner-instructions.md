@@ -10,7 +10,7 @@
 
 Analyze the above project requirements and generate a comprehensive execution plan.
 
-Create folders `.anton/plan` if they don't exist, then write your plan to `.anton/plan/plan.json`.
+Write your plan to `.anton/plan/plan.json` (the directory already exists).
 
 Requirements:
 1. Include at minimum:

@@ -39,19 +39,63 @@ The plan enables multiple AI agents to work simultaneously on different parts of
 
 ## Your Review Tasks
 
-### 1. Structural Validation
+### 1. Structural Validation (HIGHEST PRIORITY)
 
-**Check JSON Structure**:
-- Valid JSON syntax
-- All required fields present
-- Proper nesting in executionFlow
-- Correct field types
+**CRITICAL - FIRST CHECK**: The JSON MUST have this EXACT structure:
+```json
+{
+  "plan": {
+    "projectName": "string",
+    "description": "string"
+  },
+  "nodes": [...],
+  "executionFlow": {...}
+}
+```
+
+**IMMEDIATE ACTION REQUIRED if the JSON is missing ANY of these**:
+1. Missing `"plan"` object → CREATE IT with projectName and description
+2. Missing `"executionFlow"` → BUILD IT from the nodes array
+3. Wrong structure like `{"nodes": [...]}` only → REBUILD with all 3 required fields
+
+**EXAMPLE OF WRONG STRUCTURE** (common error):
+```json
+{
+  "nodes": [...]  // ❌ WRONG - Missing plan and executionFlow
+}
+```
+
+**FIX BY TRANSFORMING TO**:
+```json
+{
+  "plan": {
+    "projectName": "extract-from-metadata-or-nodes",
+    "description": "extract-from-metadata-or-requirements"
+  },
+  "nodes": [...],
+  "executionFlow": {
+    "type": "sequential",
+    "children": [
+      // Build flow from nodes based on dependencies and phases
+    ]
+  }
+}
+```
+
+**HOW TO BUILD executionFlow from nodes**:
+1. Group nodes by phase
+2. Within each phase, identify parallel groups
+3. Create sequential flow for phases
+4. Create parallel flows for groups within phases
+5. Reference nodes using `{"type": "node", "children": "node-id"}`
 
 **Node Validation**:
 - Every node has a unique ID
 - All nodes referenced in executionFlow exist in nodes array
 - No duplicate node references in executionFlow
 - Node types are valid (setup|execution|testing|fix-execution|integration)
+- **IMPORTANT**: Check agent names against the Available Agents list above
+- **DO NOT change valid agent names** (e.g., postgres-setup, go-developer are valid)
 
 **Flow Validation**:
 - ExecutionFlow is properly nested
@@ -123,7 +167,8 @@ exec-[feature] → test-[feature] → fix-[feature]
 ## Fix Priority Order
 
 1. **Critical** (Must Fix):
-   - Invalid JSON structure
+   - Invalid JSON structure (missing `plan` wrapper, missing `executionFlow`)
+   - Transform old format `{"name": "...", "nodes": [...]}` to new format
    - Duplicate nodes in executionFlow
    - Non-existent node references
    - Circular dependencies
@@ -146,13 +191,20 @@ exec-[feature] → test-[feature] → fix-[feature]
 ## Review Process
 
 1. **Load the existing plan** from `.anton/plan/plan.json`
-2. **Parse and validate** JSON structure
-3. **Check all node references** in executionFlow
-4. **Verify testing coverage** for all execution nodes
-5. **Compare against requirements** to find gaps
-6. **Fix issues** in priority order
-7. **Optimize parallelization** where possible
-8. **Write updated plan** back to `.anton/plan/plan.json`
+2. **IMMEDIATELY CHECK STRUCTURE** - If missing `plan` or `executionFlow`:
+   - Extract projectName from metadata or nodes
+   - Build executionFlow from nodes array based on dependencies
+   - Transform the entire structure to correct format
+3. **Parse and validate** JSON structure - ensure it has `plan`, `nodes`, and `executionFlow`
+4. **Check all node references** in executionFlow
+5. **Verify agent names** are valid from the Available Agents list
+6. **Verify testing coverage** for all execution nodes
+7. **Compare against requirements** to find gaps
+8. **Fix issues** in priority order - use MultiEdit tool for batch changes
+9. **Optimize parallelization** where possible
+10. **Write COMPLETE corrected plan** back to `.anton/plan/plan.json`
+
+**EFFICIENCY TIP**: Use the MultiEdit tool when making multiple similar changes (e.g., fixing multiple agent names) instead of individual Edit calls.
 
 ## Important Guidelines
 

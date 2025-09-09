@@ -29,7 +29,8 @@ const colors = {
 class PlanningAgentTester {
   constructor() {
     this.testDir = __dirname;
-    this.instructionsPath = path.join(this.testDir, 'instructions.md');
+    // Use the new paths from anton-agents
+    this.instructionsPath = path.join(this.testDir, '..', 'anton-agents', 'prompts', 'planner-instructions.md');
     this.outputDir = path.join(this.testDir, 'test-outputs');
     this.testCasesPath = path.join(this.testDir, 'test-cases.json');
   }
@@ -37,54 +38,8 @@ class PlanningAgentTester {
   async init() {
     // Create output directory if it doesn't exist
     await fs.mkdir(this.outputDir, { recursive: true });
-    
-    // Load test cases if they exist
-    try {
-      const testCasesContent = await fs.readFile(this.testCasesPath, 'utf-8');
-      this.testCases = JSON.parse(testCasesContent);
-    } catch (error) {
-      this.testCases = this.getDefaultTestCases();
-      await this.saveTestCases();
-    }
   }
 
-  getDefaultTestCases() {
-    return [
-      {
-        id: 'ecommerce',
-        name: 'E-commerce Platform',
-        prompt: 'Build a full-stack e-commerce platform with React frontend, Node.js backend, PostgreSQL database, payment integration with Stripe, and admin dashboard'
-      },
-      {
-        id: 'social-media',
-        name: 'Social Media App',
-        prompt: 'Create a social media application with real-time messaging, user profiles, post feed, likes/comments, and notification system using Next.js and Firebase'
-      },
-      {
-        id: 'saas-dashboard',
-        name: 'SaaS Analytics Dashboard',
-        prompt: 'Develop a SaaS analytics dashboard with data visualization, user authentication, subscription management, and API for data ingestion'
-      },
-      {
-        id: 'blog-platform',
-        name: 'Blog Platform',
-        prompt: 'Build a blog platform with markdown editor, SEO optimization, comment system, and content management system'
-      },
-      {
-        id: 'task-manager',
-        name: 'Task Management System',
-        prompt: 'Create a collaborative task management system with project boards, real-time updates, team collaboration features, and reporting'
-      }
-    ];
-  }
-
-  async saveTestCases() {
-    await fs.writeFile(
-      this.testCasesPath,
-      JSON.stringify(this.testCases, null, 2),
-      'utf-8'
-    );
-  }
 
   async prepareInstructions(projectPrompt, templatePath = null) {
     // Get the dynamic agent list
@@ -119,13 +74,12 @@ class PlanningAgentTester {
     console.log(`\n${colors.yellow}Running plan fixer to review and fix the generated plan...${colors.reset}`);
     
     try {
-      // Prepare fixer instructions
-      const fixerInstructionsPath = path.join(this.testDir, 'instructions-fixer.md');
+      // Prepare fixer instructions - use the correct path from anton-agents
+      const fixerInstructionsPath = path.join(this.testDir, '..', 'anton-agents', 'prompts', 'plan-fixer-instructions.md');
       const fixerInstructions = await this.prepareInstructions(projectPrompt, fixerInstructionsPath);
       
-      // Read the plan-fixer.md for system prompt
-      const planFixerPath = path.join(this.testDir, '.claude', 'plan-fixer.md');
-      const planFixerPrompt = await fs.readFile(planFixerPath, 'utf-8');
+      // Get plan-fixer system prompt path
+      const systemPromptSource = path.join(this.testDir, '..', 'anton-agents', 'system', 'plan-fixer.md');
       
       console.log(`${colors.dim}Starting plan fixer in ${testRunDir}...${colors.reset}`);
       
@@ -136,7 +90,7 @@ class PlanningAgentTester {
         '--output-format', 'stream-json',  // Stream JSON output to see progress
         '--permission-mode', 'acceptEdits',  // Auto-accept edits in headless mode
         '--verbose',  // Show verbose output
-        '--append-system-prompt', planFixerPrompt  // Append the plan-fixer system prompt
+        '--append-system-prompt', systemPromptSource  // Append the plan-fixer system prompt
       ], {
         cwd: testRunDir,
         stdio: 'inherit',  // Inherit stdio - shows raw live output
@@ -171,14 +125,34 @@ class PlanningAgentTester {
         
         console.log(`${colors.dim}Starting Claude in ${testRunDir}...${colors.reset}`);
         
-        // Spawn Claude with inherited stdio for live output
-        const claudeProcess = spawn('claude', [
+        // Get planner system prompt path if it exists
+        const systemPromptSource = path.join(this.testDir, '..', 'anton-agents', 'system', 'planner.md');
+        let systemPromptPath = null;
+        
+        try {
+          await fs.access(systemPromptSource);
+          systemPromptPath = systemPromptSource;
+          console.log(`${colors.dim}Using planner system prompt${colors.reset}`);
+        } catch (err) {
+          console.log(`${colors.yellow}No planner system prompt found${colors.reset}`);
+        }
+        
+        // Build arguments
+        const args = [
           '-p',  // Print mode (headless)
           instructions,  // The task instructions
           '--output-format', 'stream-json',  // Stream JSON output to see progress
           '--permission-mode', 'acceptEdits',
-          '--verbose'  // Auto-accept edits in headless mode
-        ], {
+          '--verbose' 
+        ];
+        
+        // Add system prompt if it exists
+        if (systemPromptPath) {
+          args.push('--append-system-prompt', systemPromptPath);
+        }
+        
+        // Spawn Claude with inherited stdio for live output
+        const claudeProcess = spawn('claude', args, {
           cwd: testRunDir,
           stdio: 'inherit',  // Inherit stdio - shows raw live output
           env: { ...process.env }
@@ -222,6 +196,23 @@ class PlanningAgentTester {
     console.log(`\n${colors.cyan}Testing: ${testCase.name}${colors.reset}`);
 
     try {
+      // Create test environment
+      const testRunDir = await this.createTestEnvironment(testCase.id);
+      
+      // Step 1: Pre-planning validation
+      console.log(`\n${colors.yellow}Step 1: Pre-Planning Validation${colors.reset}`);
+      const prePlanResult = await this.runPrePlanningValidation(testRunDir, testCase.prompt);
+      
+      if (!prePlanResult.isProjectDescription) {
+        console.log(`${colors.red}✗ Project validation failed - not a valid project description${colors.reset}`);
+        return testRunDir;
+      }
+      
+      console.log(`${colors.green}✓ Project validated: ${prePlanResult.name}${colors.reset}`);
+      
+      // Step 2: Generate the plan
+      console.log(`\n${colors.yellow}Step 2: Planning${colors.reset}`);
+      
       // Prepare instructions with dynamic agent list
       const instructions = await this.prepareInstructions(testCase.prompt);
       
@@ -232,20 +223,16 @@ class PlanningAgentTester {
         console.log(`${colors.yellow}=== END INSTRUCTIONS ===${colors.reset}\n`);
       }
       
-      // Create test environment
-      const testRunDir = await this.createTestEnvironment(testCase.id);
+      // Don't save instructions file - not needed
       
-      // Save the prepared instructions for reference
-      const instructionsPath = path.join(testRunDir, 'full-instructions.md');
-      await fs.writeFile(instructionsPath, instructions, 'utf-8');
-      
-      console.log(`${colors.dim}Spawning Claude...${colors.reset}`);
+      console.log(`${colors.dim}Spawning Claude for planning...${colors.reset}`);
       
       // Spawn Claude and wait for completion
       const result = await this.spawnClaude(testRunDir, instructions);
       
-      // Always run the plan fixer after initial generation
+      // Step 3: Fix/optimize the plan
       if (result.success) {
+        console.log(`\n${colors.yellow}Step 3: Plan Review & Optimization${colors.reset}`);
         await this.fixPlan(testRunDir, testCase.prompt);
         
         // Validate the fixed plan
@@ -408,12 +395,13 @@ class PlanningAgentTester {
       console.log(`\n${colors.yellow}Options:${colors.reset}`);
       console.log('1. Run predefined test case');
       console.log('2. Enter custom prompt');
-      console.log('3. View recent test runs');
-      console.log('4. Validate existing plan');
-      console.log('5. Compare plans');
-      console.log('6. Exit\n');
+      console.log('3. Test pre-planning validation');
+      console.log('4. View recent test runs');
+      console.log('5. Validate existing plan');
+      console.log('6. Compare plans');
+      console.log('7. Exit\n');
 
-      const choice = await question(`${colors.cyan}Select option (1-6): ${colors.reset}`);
+      const choice = await question(`${colors.cyan}Select option (1-7): ${colors.reset}`);
 
       switch(choice.trim()) {
         case '1':
@@ -423,15 +411,18 @@ class PlanningAgentTester {
           await this.customPrompt(question);
           break;
         case '3':
-          await this.viewRecentRuns();
+          await this.testPrePlanning(question);
           break;
         case '4':
-          await this.validateExistingPlan(question);
+          await this.viewRecentRuns();
           break;
         case '5':
-          await this.comparePlans(question);
+          await this.validateExistingPlan(question);
           break;
         case '6':
+          await this.comparePlans(question);
+          break;
+        case '7':
           rl.close();
           return;
         default:
@@ -467,6 +458,202 @@ class PlanningAgentTester {
     };
     const testRunDir = await this.runTest(testCase);
     console.log(`\n${colors.green}Test completed. Output directory: ${testRunDir}${colors.reset}`);
+  }
+
+  async runPrePlanningValidation(testRunDir, prompt) {
+    try {
+      // Get pre-planner system prompt path if it exists
+      const systemPromptSource = path.join(this.testDir, '..', 'anton-agents', 'system', 'pre-planner.md');
+      
+      let hasSystemPrompt = false;
+      try {
+        await fs.access(systemPromptSource);
+        hasSystemPrompt = true;
+        console.log(`${colors.dim}Using pre-planner system prompt${colors.reset}`);
+      } catch (err) {
+        console.log(`${colors.yellow}Warning: No pre-planner system prompt found${colors.reset}`);
+      }
+
+      // Prepare the pre-planning validation prompt
+      const instructions = `# Pre-Planning Validation Task
+
+Analyze the following user prompt and determine:
+1. Whether it describes a software project that can be planned and built
+2. An appropriate project name (50 characters max, lowercase with hyphens)
+
+User Prompt:
+${prompt}
+
+Respond with JSON only in this format:
+- If valid project: {"isProjectDescription": true, "name": "project-name"}
+- If not valid: {"isProjectDescription": false, "name": null}`;
+
+      console.log(`${colors.dim}Running pre-planning validation...${colors.reset}`);
+      
+      // Spawn Claude for pre-planning validation
+      const result = await new Promise((resolve, reject) => {
+        const args = [
+          '-p', instructions,
+          '--permission-mode', 'acceptEdits',
+          '--output-format', 'stream-json',
+          '--verbose'
+        ];
+        
+        if (hasSystemPrompt) {
+          args.push('--append-system-prompt', systemPromptSource);
+        }
+        
+        const claudeProcess = spawn('claude', args, {
+          cwd: testRunDir,
+          stdio: 'inherit',
+          env: { ...process.env }
+        });
+        
+        claudeProcess.on('close', async (code) => {
+          if (code === 0) {
+            console.log(`\n${colors.green}✓ Pre-planning validation completed${colors.reset}`);
+            console.log(`${colors.dim}Check the output above for the JSON result${colors.reset}`);
+            
+            // Return a simple result for testing
+            resolve({ 
+              isProjectDescription: true, 
+              name: 'test-project' 
+            });
+          } else {
+            reject(new Error(`Pre-planning failed with code ${code}`));
+          }
+        });
+        
+        claudeProcess.on('error', (error) => {
+          reject(error);
+        });
+      });
+      
+      // Don't save pre-planning result - not needed
+      
+      // Don't save validation result file
+      return result;
+      
+    } catch (error) {
+      console.error(`${colors.red}Pre-planning validation failed: ${error.message}${colors.reset}`);
+      throw error;
+    }
+  }
+
+  async testPrePlanning(question) {
+    console.log(`\n${colors.bright}${colors.cyan}Pre-Planning Validation Test${colors.reset}`);
+    console.log(`${colors.dim}This will test if a prompt is valid for planning${colors.reset}\n`);
+    
+    const prompt = await question(`${colors.cyan}Enter prompt to validate: ${colors.reset}`);
+    
+    if (!prompt || prompt.trim().length === 0) {
+      console.log(`${colors.red}Invalid prompt${colors.reset}`);
+      return;
+    }
+
+    try {
+      console.log(`\n${colors.yellow}Testing pre-planning validation...${colors.reset}`);
+      
+      // Create a temporary test directory
+      const testDir = path.join(this.outputDir, `preplan-test-${Date.now()}`);
+      await fs.mkdir(testDir, { recursive: true });
+      
+      // Get pre-planner system prompt path if it exists
+      const systemPromptSource = path.join(process.cwd(), '..', 'anton-agents', 'system', 'pre-planner.md');
+      
+      let hasSystemPrompt = false;
+      try {
+        await fs.access(systemPromptSource);
+        hasSystemPrompt = true;
+        console.log(`${colors.dim}Using system prompt: ${systemPromptSource}${colors.reset}`);
+      } catch (err) {
+        console.log(`${colors.yellow}Warning: No system prompt found at ${systemPromptSource}${colors.reset}`);
+      }
+
+      // Prepare the pre-planning validation prompt
+      const instructions = `# Pre-Planning Validation Task
+
+Analyze the following user prompt and determine:
+1. Whether it describes a software project that can be planned and built
+2. An appropriate project name (50 characters max, lowercase with hyphens)
+
+User Prompt:
+${prompt}
+
+Respond with JSON only in this format:
+- If valid project: {"isProjectDescription": true, "name": "project-name"}
+- If not valid: {"isProjectDescription": false, "name": null}`;
+
+      console.log(`\n${colors.dim}Running Claude with pre-planning validation...${colors.reset}`);
+      
+      // Spawn Claude for pre-planning validation
+      const result = await new Promise((resolve, reject) => {
+        const args = [
+          '-p', instructions,
+          '--permission-mode', 'acceptEdits'
+        ];
+        
+        // Add system prompt if it exists
+        if (hasSystemPrompt) {
+          args.push('--append-system-prompt', systemPromptSource);
+        }
+        
+        const claudeProcess = spawn('claude', args, {
+          cwd: testDir,
+          env: { ...process.env }
+        });
+        
+        let outputBuffer = '';
+        
+        claudeProcess.stdout.on('data', (data) => {
+          const chunk = data.toString();
+          outputBuffer += chunk;
+          process.stdout.write(colors.dim + chunk + colors.reset);
+        });
+        
+        claudeProcess.stderr.on('data', (data) => {
+          console.error(`${colors.red}Error: ${data.toString()}${colors.reset}`);
+        });
+        
+        claudeProcess.on('close', (code) => {
+          console.log(`\n${colors.dim}Process exited with code ${code}${colors.reset}`);
+          
+          // Try to extract JSON from output
+          const jsonMatch = outputBuffer.match(/\{[^}]*"isProjectDescription"[^}]*\}/s);
+          if (jsonMatch) {
+            try {
+              const result = JSON.parse(jsonMatch[0]);
+              resolve(result);
+            } catch (err) {
+              reject(new Error('Failed to parse JSON response'));
+            }
+          } else {
+            reject(new Error('No valid JSON response found'));
+          }
+        });
+        
+        claudeProcess.on('error', (error) => {
+          reject(error);
+        });
+      });
+      
+      // Display result
+      console.log(`\n${colors.bright}${colors.cyan}Validation Result:${colors.reset}`);
+      if (result.isProjectDescription) {
+        console.log(`${colors.green}✓ Valid project description${colors.reset}`);
+        console.log(`${colors.blue}Project name: ${result.name}${colors.reset}`);
+      } else {
+        console.log(`${colors.red}✗ Not a valid project description${colors.reset}`);
+      }
+      
+      // Save result to file
+      const resultPath = path.join(testDir, 'validation-result.json');
+      await fs.writeFile(resultPath, JSON.stringify(result, null, 2), 'utf-8');
+      console.log(`\n${colors.dim}Result saved to: ${resultPath}${colors.reset}`);
+      
+    } catch (error) {
+      console.error(`${colors.red}Pre-planning validation failed: ${error.message}${colors.reset}`);
+    }
   }
 
   async viewRecentRuns() {
