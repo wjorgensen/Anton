@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/rpgir.schema.json",
+  "title": "Repository Planning Graph IR (RPG-IR)",
+  "type": "object",
+  "required": ["version", "project", "nodes", "edges", "constraints", "rev"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the IR schema logic, not the JSON Schema draft",
+      "pattern": "^rpg-ir@\\d+\\.\\d+(\\.\\d+)?$"
+    },
+    "rev": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonically increasing revision counter"
+    },
+    "project": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable project id",
+          "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "object",
+      "description": "Normalized intent: features, NFRs, and hard constraints declared by user/tenant",
+      "properties": {
+        "features": { "type": "array", "items": { "$ref": "#/$defs/FeatureRequirement" } },
+        "non_functionals": { "type": "array", "items": { "$ref": "#/$defs/NFR" } }
+      },
+      "additionalProperties": false
+    },
+    "constraints": {
+      "$ref": "#/$defs/GlobalConstraints"
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Node" },
+      "uniqueItems": true
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Edge" },
+      "uniqueItems": true
+    },
+    "adapters": {
+      "type": "array",
+      "description": "Optional explicit adapter nodes auto-inserted during typing",
+      "items": { "$ref": "#/$defs/Adapter" }
+    },
+    "file_layout": {
+      "$ref": "#/$defs/FileLayout",
+      "description": "Optional: mapping from nodes to concrete files/folders and generated artifacts"
+  },
+  "metadata": {
+      "type": "object",
+      "description": "Freeform metadata and build-time annotations",
+      "properties": {
+        "lifecycle": {
+          "type": "object",
+          "properties": {
+            "phase": { "type": "string", "enum": ["skeleton", "typing", "ready"] },
+            "lastValidatedAt": { "type": "string", "format": "date-time" },
+            "lastValidationErrors": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+
+  "$defs": {
+    "FeatureRequirement": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Capability key from your small ontology (e.g., ingress:http, auth:jwt)"
+        },
+        "mandatory": { "type": "boolean", "default": true },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "NFR": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": ["string", "number", "boolean"] },
+        "unit": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "GlobalConstraints": {
+      "type": "object",
+      "required": ["runtime"],
+      "properties": {
+        "runtime": {
+          "type": "array",
+          "description": "Permitted runtimes and versions (semver or ranges)",
+          "items": { "type": "string" }
+        },
+        "licenses_allow": { "type": "array", "items": { "type": "string" } },
+        "licenses_deny": { "type": "array", "items": { "type": "string" } },
+        "regions": { "type": "array", "items": { "type": "string" } },
+        "policy": {
+          "type": "object",
+          "description": "Org policy packs: allow/deny by tag or source, max deps, secrets policy, etc.",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Node": {
+      "type": "object",
+      "required": ["id", "kind", "summary", "inputs", "outputs"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable node id",
+          "pattern": "^[a-z0-9](?:[a-z0-9._-]{1,62})@\\d+(?:\\.\\d+){0,2}$"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["framework", "module", "atom", "adapter", "infra", "test"]
+        },
+        "summary": { "type": "string", "minLength": 1 },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "language": {
+          "type": "string",
+          "description": "Primary implementation language if known (go, ts, py, etc.)"
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Port" },
+          "uniqueItems": true
+        },
+        "outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Port" },
+          "uniqueItems": true
+        },
+        "contracts": { "$ref": "#/$defs/Contracts" },
+        "deps": {
+          "type": "array",
+          "description": "External runtime/library deps (coordinates or names)",
+          "items": { "type": "string" }
+        },
+        "framework_hint": {
+          "type": "string",
+          "description": "Optional opinionated stack advice (e.g., 'express', 'fiber', 'fastapi')"
+        },
+        "module_candidates": {
+          "type": "array",
+          "description": "References to marketplace nodes/templates",
+          "items": { "type": "string" }
+        },
+        "quality": { "$ref": "#/$defs/Quality" },
+        "security": { "$ref": "#/$defs/Security" },
+        "notes": { "type": "string" },
+        "hash": {
+          "type": "string",
+          "description": "Content hash of the node spec for caching",
+          "pattern": "^[a-f0-9]{32,64}$"
+        },
+        "buffer": {
+          "type": "boolean",
+          "description": "Indicates whether this node buffers data and can break cycles"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Port": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,63}$"
+        },
+        "type": { "$ref": "#/$defs/TypeExpr" },
+        "required": { "type": "boolean", "default": true },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "Edge": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "$ref": "#/$defs/Endpoint" },
+        "to": { "$ref": "#/$defs/Endpoint" },
+        "order_before": {
+          "type": "boolean",
+          "description": "If true, source node must complete before target starts"
+        },
+        "coercion": { "type": ["object", "null"] },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "Endpoint": {
+      "type": "object",
+      "required": ["node", "port"],
+      "properties": {
+        "node": {
+          "type": "string",
+          "pattern": "^[a-z0-9](?:[a-z0-9._-]{1,62})@\\d+(?:\\.\\d+){0,2}$"
+        },
+        "port": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,63}$"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Adapter": {
+      "type": "object",
+      "required": ["id", "from", "to", "strategy"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^adapter\\.[a-z0-9._-]+@\\d+(?:\\.\\d+){0,2}$"
+        },
+        "from": { "$ref": "#/$defs/TypeExpr" },
+        "to": { "$ref": "#/$defs/TypeExpr" },
+        "strategy": {
+          "type": "string",
+          "enum": ["rename_field", "cast_scalar", "map_record", "custom_fn", "filter_fields", "augment_fields"]
+        },
+        "codegen_hint": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "Contracts": {
+      "type": "object",
+      "description": "Lightweight pre/post/invariant predicates drawn from a small vocabulary; deeper checks happen in code validators",
+      "properties": {
+        "pre": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Predicate" },
+          "default": []
+        },
+        "post": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Predicate" },
+          "default": []
+        },
+        "invariants": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Predicate" },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Predicate": {
+      "type": "string",
+      "description": "Predicate DSL string; keep simple and machine-checkable (e.g., inputs.amount > 0, outputs.user.id != null)"
+    },
+
+    "TypeExpr": {
+      "type": "object",
+      "description": "Algebraic type description; validate shape here, deeper rules handled by validator.",
+      "oneOf": [
+        { "$ref": "#/$defs/TScalar" },
+        { "$ref": "#/$defs/TArray" },
+        { "$ref": "#/$defs/TRecord" },
+        { "$ref": "#/$defs/TUnion" },
+        { "$ref": "#/$defs/TOpaque" },
+        { "$ref": "#/$defs/TLiteral" }
+      ]
+    },
+
+    "TScalar": {
+      "type": "object",
+      "required": ["kind", "name"],
+      "properties": {
+        "kind": { "const": "Scalar" },
+        "name": {
+          "type": "string",
+          "enum": ["Number", "String", "Bool"]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "TArray": {
+      "type": "object",
+      "required": ["kind", "of"],
+      "properties": {
+        "kind": { "const": "Array" },
+        "of": { "$ref": "#/$defs/TypeExpr" }
+      },
+      "additionalProperties": false
+    },
+
+    "TRecord": {
+      "type": "object",
+      "required": ["kind", "fields"],
+      "properties": {
+        "kind": { "const": "Record" },
+        "fields": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+          "additionalProperties": { "$ref": "#/$defs/TypeExpr" }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "TUnion": {
+      "type": "object",
+      "required": ["kind", "options"],
+      "properties": {
+        "kind": { "const": "Union" },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/TypeExpr" }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "TOpaque": {
+      "type": "object",
+      "required": ["kind", "name"],
+      "properties": {
+        "kind": { "const": "Opaque" },
+        "name": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9_]{0,63}$" },
+        "doc": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "TLiteral": {
+      "type": "object",
+      "required": ["kind", "valueType", "value"],
+      "properties": {
+        "kind": { "const": "Literal" },
+        "valueType": { "type": "string", "enum": ["Number", "String", "Bool"] },
+        "value": { "type": ["number", "string", "boolean"] }
+      },
+      "additionalProperties": false
+    },
+
+    "Quality": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+
+    "Security": {
+      "type": "object",
+      "properties": {
+        "threat_model": { "type": "string" },
+        "known_issues": { "type": "array", "items": { "type": "string" } },
+        "ruleset": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "FileLayout": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "kind", "nodeId", "role", "language"],
+            "properties": {
+              "path": { "type": "string" },
+              "kind": { "type": "string", "enum": ["code", "test", "config", "barrel"] },
+              "nodeId": {
+                "type": "string",
+                "pattern": "^[a-z0-9](?:[a-z0-9._-]{1,62})@\\d+(?:\\.\\d+){0,2}$"
+              },
+              "role": { "type": "string" },
+              "language": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "barrels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "exports"],
+            "properties": {
+              "path": { "type": "string" },
+              "exports": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
